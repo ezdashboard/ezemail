@@ -112,7 +112,6 @@ const onSubmit = (e) => {
            }else if(res &&  res.data && res.data.msg && res.data.msg.length > 0){
                    //Router.push('/thankyou')
                    setFormStatus("User added successfully.");
-                   //localStorage.clear();
                    setInputData({
                      companyname : '',
                      name : '',
@@ -137,21 +136,33 @@ const onSubmit = (e) => {
    }
  }
  useEffect(() => {
-   // if(localStorage.title && localStorage.email && localStorage.logo && localStorage.companyname && localStorage.userid && localStorage.name){
-   //     setProfileData({
-   //         companyname : localStorage.companyname,
-   //         title : localStorage.title,
-   //         name : localStorage.name,
-   //         email : localStorage.email,
-   //         contactno : localStorage.contactno ? localStorage.contactno : '',
-   //         about : localStorage.about ? localStorage.about : '',
-   //         location : localStorage.location ? localStorage.location : '',
-   //         image : localStorage.image ? localStorage.image : '',
-   //         logo : localStorage.logo,
-   //         updatedBy : localStorage && localStorage.tokenAuth ? localStorage.tokenAuth : '',
-   //         userid : localStorage.userid
-   //     });
-   // }
+   if (typeof window !== 'undefined' && window.localStorage) {
+      let companyname = localStorage.getItem('companyname');
+      let title = localStorage.getItem('title');
+      let name = localStorage.getItem('name');
+      let email = localStorage.getItem('email');
+      let contactno = localStorage.getItem('contactno');
+      let about = localStorage.getItem('about');
+      let location = localStorage.getItem('location');
+      let image = localStorage.getItem('image');
+      let logo = localStorage.getItem('logo');
+      let updatedBy = localStorage.getItem('tokenAuth');
+      let userid = localStorage.getItem('userid');
+      setProfileData({
+         companyname : companyname ? companyname:'',
+         title : title ? title :'',
+         name : name ? name : '',
+         email : email ? email :'',
+         contactno : contactno ? contactno : '',
+         about : about ? about : '',
+         location : location ? location : '',
+         image : image ? image : '',
+         logo : logo ? logo :'',
+         updatedBy : tokenAuth ? tokenAuth : '',
+         userid : userid ? userid: null
+     });
+  
+   }
    }, []);
  return(
     <>

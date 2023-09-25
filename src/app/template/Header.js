@@ -9,11 +9,12 @@ import { useRouter } from 'next/navigation';
 const Header =()=>{
     const router = useRouter()
     const [shHd, setshHd]= useState(true);
+    const [name, setName] = useState('')
     const showMenu=()=>{
             setshHd(!shHd)
     }
     const Logout = ()=>{
-        //localStorage.clear();
+        localStorage.clear();
         router.push("/")
     }
     const sideActive=()=>{
@@ -29,6 +30,15 @@ const Header =()=>{
         $(".expovent__sidebar").removeClass("open");
         $(".app__offcanvas-overlay").removeClass("overlay-open");
     }
+    useEffect(() => {
+        if (typeof window !== 'undefined' && window.localStorage) {
+           let name = localStorage.getItem('name');
+           if(name){
+            setName(name)
+           }  
+        }
+     
+        }, []);
   return(
     <>
     <div className="app__header__area">
@@ -54,7 +64,7 @@ const Header =()=>{
                         </div>
                         <div className="user__content">
                         <span>
-                            {/* {localStorage && localStorage.name ? localStorage.name : ''} */}
+                            { name ? name : ''}
                             </span>
                         <FontAwesomeIcon icon={faChevronDown} />
                         </div>

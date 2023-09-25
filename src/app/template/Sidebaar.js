@@ -2,13 +2,23 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faHouse, faUser, faUsers,faArrowRightFromBracket,faChevronDown } from '@fortawesome/free-solid-svg-icons'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation';
-
+import {useEffect, useState} from 'react'
 const Sidebaar = ()=>{
 const router = useRouter()
+const [userType, setUserType] = useState('')
 const Logout = ()=>{
-    //localStorage.clear();
+    localStorage.clear();
     router.push("/")
 }
+useEffect(() => {
+    if (typeof window !== 'undefined' && window.localStorage) {
+       let localType = localStorage.getItem('type');
+       if(localType){
+        setUserType(localType)
+       }  
+    }
+ 
+    }, []);
 return(
     <>
                 <div className="expovent__sidebar" data-background="/assets/img/bg/dropdown-bg.png">
@@ -25,7 +35,7 @@ return(
                     <ul className="metismenu" id="menu">
                         <li> <Link className="has-arrow" href="/dashboard" robotoregular="true"  ><FontAwesomeIcon icon={faHouse}/><span className='nav-text'>Dashboard</span> </Link></li>
                         <li className="mm-active"><Link href="/profile" robotoregular="true"> <FontAwesomeIcon icon={faUser}/> <span className='nav-text'>Profile</span> </Link> </li>
-{        //   localStorage && localStorage.type && localStorage.type == 'admin' &&            
+{           userType &&  userType == 'admin' &&            
                      <li><Link href="/users" robotoregular="true"> <FontAwesomeIcon icon={faUsers} /> <span className='nav-text'>User Management </span></Link></li>}
                     </ul>
                     

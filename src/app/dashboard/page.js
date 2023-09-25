@@ -13,6 +13,8 @@ import Pagination from 'react-bootstrap/Pagination';
 import axios from 'axios';
 
 const Dashbord=()=>{
+    const [userType, setUserType] = useState('')
+
     const sideCanvasActive= () =>{ 
         $(".expovent__sidebar").removeClass("collapsed");
         $(".expovent__sidebar").removeClass("open");
@@ -49,15 +51,17 @@ const Dashbord=()=>{
         .catch(err => {
          })
      } 
-    useEffect(() => {
-        // if(localStorage && localStorage.length > 0 && localStorage.type && localStorage.type != "user"){
-        //     setSideBarAccess({
-        //         users : true
-        //     })
-            getServiceData();
-       // }
 
-        }, []);
+        useEffect(() => {
+            if (typeof window !== 'undefined' && window.localStorage) {
+               let localType = localStorage.getItem('type');
+               if(localType){
+                setUserType(localType)
+               }  
+            }
+            getServiceData();
+
+            }, []);
     return(
         
         <>

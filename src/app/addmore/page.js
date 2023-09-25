@@ -13,6 +13,8 @@ const Addmore=()=>{
    const [sideBarAccess, setSideBarAccess] = useState({
       users: false
    });
+   const [userType, setUserType] = useState('')
+
    const [inputData, setInputData] = useState({
       leadGenBy: null,
       leadGenFor:'',
@@ -76,15 +78,15 @@ const Addmore=()=>{
          })
    }                
    useEffect(() => {
-      // if(localStorage && localStorage.length > 0 && localStorage.type && localStorage.type != "user"){
-      //       setSideBarAccess({
-      //          users : true
-      //       })
-            getServiceData();
-            getCountryData();
-      //}
-
+      if (typeof window !== 'undefined' && window.localStorage) {
+         let localType = localStorage.getItem('type');
+         if(localType){
+          setUserType(localType)
+         }  
+      }
+   
       }, []);
+
  return(
     <>
       <div className='page_-full-wrapper'>
