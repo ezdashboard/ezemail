@@ -1,7 +1,7 @@
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import {  faUser,faArrowRightFromBracket,faChevronDown } from '@fortawesome/free-solid-svg-icons'
-import {React, useState} from 'react'
+import {React, useState,useEffect} from 'react'
 import $ from "jquery";
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
