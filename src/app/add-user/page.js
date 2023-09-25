@@ -158,10 +158,10 @@ const onSubmit = (e) => {
          location : location ? location : '',
          image : image ? image : '',
          logo : logo ? logo :'',
-         updatedBy : tokenAuth ? tokenAuth : '',
+         updatedBy : updatedBy ? updatedBy : '',
          userid : userid ? userid: null
      });
-  
+
    }
    }, []);
  return(

@@ -15,6 +15,7 @@ import axios from 'axios';
 const Users=()=>{
     const [currentPage, setCurrentPage] = useState(1);
     const [limitp, setlimitp] =useState(5);
+    const [userType, setUserType] = useState('')
     const [totalPages, setPageCount] = useState(1);
     const [userStoreData, setUserStoreData] = useState([]);
     const [profileData, setProfileData] = useState({
@@ -81,24 +82,41 @@ const Users=()=>{
         })
         .catch(err => {
          })
-     }
+     } 
       useEffect(() => {
-          // if(localStorage.title && localStorage.email && localStorage.logo && localStorage.companyname && localStorage.userid && localStorage.name){
-          //     setProfileData({
-          //         companyname : localStorage.companyname,
-          //         title : localStorage.title,
-          //         name : localStorage.name,
-          //         email : localStorage.email,
-          //         contactno : localStorage.contactno ? localStorage.contactno : '',
-          //         about : localStorage.about ? localStorage.about : '',
-          //         location : localStorage.location ? localStorage.location : '',
-          //         image : localStorage.image ? localStorage.image : '',
-          //         logo : localStorage.logo,
-          //         userid : localStorage.userid
-          //     });
-          // }
+        if (typeof window !== 'undefined' && window.localStorage) {
+
+              let companyname = localStorage.getItem('companyname');
+              let title = localStorage.getItem('title');
+              let name = localStorage.getItem('name');
+              let email = localStorage.getItem('email');
+              let contactno = localStorage.getItem('contactno');
+              let about = localStorage.getItem('about');
+              let location = localStorage.getItem('location');
+              let image = localStorage.getItem('image');
+              let logo = localStorage.getItem('logo');
+              let updatedBy = localStorage.getItem('tokenAuth');
+              let userid = localStorage.getItem('userid');
+
+              setProfileData({
+                companyname : companyname ? companyname:'',
+                title : title ? title :'',
+                name : name ? name : '',
+                email : email ? email :'',
+                contactno : contactno ? contactno : '',
+                about : about ? about : '',
+                location : location ? location : '',
+                image : image ? image : '',
+                logo : logo ? logo :'',
+                updatedBy : updatedBy ? updatedBy : '',
+                userid : userid ? userid: null
+              });
+          }
           fetchData(currentPage);
-    
+          let localType = localStorage.getItem('type');
+          if(localType){
+           setUserType(localType)
+          }
           }, [currentPage]);
     return(
         
@@ -138,7 +156,7 @@ const Users=()=>{
                                 </form>
                               </div> */}
                             { 
-                             //localStorage && localStorage.type && localStorage.type == 'admin' &&   
+                             userType && userType == 'admin' &&   
                                 <div className='add-more'>
                                 <Link href='/add-user'>Add User</Link>
                               </div>}

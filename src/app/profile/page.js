@@ -49,6 +49,11 @@ const Profile=()=>{
 const [sideBarAccess, setSideBarAccess] = useState({
   users: false
 });
+const [email, setEmail] = useState('')
+const [logo, setLogo] = useState('')
+const [image, setImage] = useState('')
+const [userid, setUserid] = useState(null)
+const [name, setName] =useState('')
 const inputChangeData =(event)=> {
   const {name, value} = event.target;
   setInputData((valuePre)=>{
@@ -95,13 +100,12 @@ const inputChangeData =(event)=> {
             }else if(res &&  res.data && res.data.msg && res.data.msg.length > 0){
                     //Router.push('/thankyou')
                     setFormStatus("Update Successfully.");
-                    //localStorage.clear();
-                    // localStorage.setItem('name', inputData.name);
-                    // localStorage.setItem('title', inputData.title);
-                    // localStorage.setItem('companyname', inputData.companyname);
-                    // localStorage.setItem('contactno', inputData.contactno);
-                    // localStorage.setItem('about', inputData.about);
-                    // localStorage.setItem('location', inputData.location);
+                    localStorage.setItem('name', inputData.name);
+                    localStorage.setItem('title', inputData.title);
+                    localStorage.setItem('companyname', inputData.companyname);
+                    localStorage.setItem('contactno', inputData.contactno);
+                    localStorage.setItem('about', inputData.about);
+                    localStorage.setItem('location', inputData.location);
                     setProfileData({
                       companyname : inputData.companyname,
                       title : inputData.title,
@@ -109,10 +113,10 @@ const inputChangeData =(event)=> {
                       contactno : inputData.contactno ? inputData.contactno : '',
                       about : inputData.about ? inputData.about : '',
                       location : inputData.location ? inputData.location : '',
-                      // email : localStorage.email,
-                      // image : localStorage.image ? localStorage.image : '',
-                      // logo : localStorage.logo?localStorage.logo:'',
-                      // userid : localStorage.userid
+                      email : email ? email :'',
+                      image : image ? image : '',
+                      logo : logo?logo:'',
+                      userid : userid ? userid : null
                   });
 
                     setCloseIcon(true);
@@ -130,37 +134,51 @@ const inputChangeData =(event)=> {
     }
   }
   useEffect(() => {
-  //   if(localStorage.email && localStorage.userid && localStorage.name){
-  //       setProfileData({
-  //           companyname : localStorage.companyname,
-  //           title : localStorage.title,
-  //           name : localStorage.name,
-  //           email : localStorage.email,
-  //           contactno : localStorage.contactno ? localStorage.contactno : '',
-  //           about : localStorage.about ? localStorage.about : '',
-  //           location : localStorage.location ? localStorage.location : '',
-  //           image : localStorage.image ? localStorage.image : '',
-  //           logo : localStorage.logo,
-  //           userid : localStorage.userid
-  //       });
-  //       setInputData({
-  //           companyname : localStorage.companyname,
-  //           title : localStorage.title,
-  //           name : localStorage.name,
-  //           email : localStorage.email,
-  //           contactno : localStorage.contactno ? localStorage.contactno : '',
-  //           about : localStorage.about ? localStorage.about : '',
-  //           location : localStorage.location ? localStorage.location : '',
-  //           image : localStorage.image ? localStorage.image : '',
-  //           logo : localStorage.logo,
-  //           userid : localStorage.userid
-  //       });
-  //   }
-  //   if(localStorage && localStorage.length > 0 && localStorage.type && localStorage.type=="admin"){
-  //     setSideBarAccess({
-  //         users : true
-  //     })
-  // }
+    if (typeof window !== 'undefined' && window.localStorage) {
+      let companyname = localStorage.getItem('companyname');
+      let title = localStorage.getItem('title');
+      let name = localStorage.getItem('name');
+      let email = localStorage.getItem('email');
+      let contactno = localStorage.getItem('contactno');
+      let about = localStorage.getItem('about');
+      let location = localStorage.getItem('location');
+      let image = localStorage.getItem('image');
+      let logo = localStorage.getItem('logo');
+      let updatedBy = localStorage.getItem('tokenAuth');
+      let userid = localStorage.getItem('userid');
+      setName(name)
+      setLogo(logo)
+      setEmail(email)
+      setImage(image)
+      setUserid(userid)
+      setProfileData({
+         companyname : companyname ? companyname:'',
+         title : title ? title :'',
+         name : name ? name : '',
+         email : email ? email :'',
+         contactno : contactno ? contactno : '',
+         about : about ? about : '',
+         location : location ? location : '',
+         image : image ? image : '',
+         logo : logo ? logo :'',
+         updatedBy : updatedBy ? updatedBy : '',
+         userid : userid ? userid: null
+     });
+     setInputData({
+      companyname : companyname ? companyname:'',
+      title : title ? title :'',
+      name : name ? name : '',
+      email : email ? email :'',
+      contactno : contactno ? contactno : '',
+      about : about ? about : '',
+      location : location ? location : '',
+      image : image ? image : '',
+      logo : logo ? logo :'',
+      updatedBy : updatedBy ? updatedBy : '',
+      userid : userid ? userid: null
+  });
+}
+
     }, []);
  return(
     <>

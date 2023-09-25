@@ -99,7 +99,7 @@ const Dashbord=()=>{
                                 <button type="button">Search</button>
                                 </form>
                               </div>
-{                           //localStorage && localStorage.type && localStorage.type == 'admin' &&   
+{                           userType &&userType == 'admin' &&   
                                 <div className='add-more'>
                                 <Link href='/addmore'>Add More</Link>
                               </div>}
