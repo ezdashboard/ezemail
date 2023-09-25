@@ -812,6 +812,12 @@ add more page css start here
 .profile-text {
   padding-inline-end: 92px;
 }
+.loader{
+  box-sizing: border-box;
+  text-align: center;
+  font-size: 24px;
+  font-weight: 800;
+}
 /* ==========================
 add more page css end here 
 ==============================*/

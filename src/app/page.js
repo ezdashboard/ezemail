@@ -5,7 +5,8 @@ import { Roboto } from 'next/font/google';
 import { React,useState } from 'react';
 import axios from 'axios';
 import { useRouter } from 'next/navigation';
- 
+import Spinner from 'react-bootstrap/Spinner';
+
 const roboto=Roboto({
   weight:'900',
   subsets:['latin'],
@@ -20,6 +21,7 @@ const robotolight=Roboto({
 
 function Login() {
   const router = useRouter()
+  const [isLoading, setLoading] = useState(false)
   const [closeIcon, setCloseIcon] = useState(false)
   const [isValidEmail, setIsValidEmail] = useState(false)
   const [msg, setFormStatus] = useState('')
@@ -43,6 +45,7 @@ function Login() {
 
   }
   const submitLogin =(e)=> {
+    setFormStatus("");
     if(!inputData.email){
       setFormStatus("Email can not be blank.")
       setCloseIcon(true);
@@ -53,6 +56,7 @@ function Login() {
       setFormStatus("Password can not be blank.")
       setCloseIcon(true);  
   }else{
+    setLoading(true)
     axios.post(`${process.env.API_BASE_URL}login.php`,inputData,{
       headers: {
       'Content-Type': 'multipart/form-data'
@@ -62,6 +66,7 @@ function Login() {
           if(res &&  res.data && res.data.error && res.data.error.length > 0){
               setFormStatus( res.data.error);
               setCloseIcon(true);
+              setLoading(false)
           }else{
               if(data){
                   setInputData({
@@ -92,10 +97,12 @@ function Login() {
                       router.push('/dashboard')
                   }
                 }
+                setLoading(false)
           }
 
     })
     .catch(err => {
+      setLoading(false)
      })
   }
 }
@@ -113,12 +120,23 @@ function Login() {
              <div className="col-md-12">
                         {closeIcon  ?<span style={submitBtn}>{msg}  <span onClick={submitCloseIcon}><i className="fa fa-times" aria-hidden="true"></i></span></span>: ""}
              </div>
-                <h1 className={roboto.className}>Log In To LMS</h1> 
+             <h1 className={roboto.className}>Log In To LMS</h1> 
+              {isLoading &&
+                <div className='loader'>
+                  <Spinner animation="border" role="status">
+                      <span className="visually-hidden">Loading...</span>
+                  </Spinner>
+                </div>
+                }
+                {!isLoading &&
+                <span>
                 <input type="text" placeholder="User Name"  name="email" value={inputData.email} onChange={handleChange}/>
                 <input type="password" placeholder="Password" name="password" value={inputData.password} onChange={handleChange} />
                 <button className={robotolight.className} type="button" onClick={()=>{
                   submitLogin()
                 }}>Log In</button>
+                </span>
+                }
               </form>
             </div>  
         </div>
