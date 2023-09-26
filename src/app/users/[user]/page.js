@@ -18,42 +18,23 @@ const EditUser = ({params})=>{
     const [modalShow, setModalShow] = useState(false);
     const [msgType, setMsgType] = useState('')
     const [inputData, setInputData] = useState({
-       companyname : '',
-       title : '',
+       type : '',
        name : '',
        email : '',
-       mangerId: '',
-       contactno : '',
-       about : '',
-       location : '',
        type : '',
        updatedBy : '',
        userid :''
    });
-   const [profileData, setProfileData] = useState({
-    companyname : '',
-    title : '',
-    name : '',
-    email : '',
-    mangerId: '',
-    contactno : '',
-    about : '',
-    location : '',
-    image : '',
-    logo : '',
-    type:'',
-    updatedBy : '',
-    userid : ''
- });
+
     const inputChangeData =(event)=> {
        setModalShow(false)
        setMsgType('')
     const {name, value} = event.target;
-    if(name && name=="type" && value && value =="user"){
-      setShowManager(true);
-    }else if(name && name=="type" && (!value || value !="user")){
-      setShowManager(false);
-    }
+    // if(name && name=="type" && value && value =="user"){
+    //   setShowManager(true);
+    // }else if(name && name=="type" && (!value || value !="user")){
+    //   setShowManager(false);
+    // }
     setInputData((valuePre)=>{
     return{
       ...valuePre,
@@ -92,20 +73,16 @@ const EditUser = ({params})=>{
       setCloseIcon(true);  
       setModalShow(true)
       setMsgType('error')
-    }else if(!inputData.password){
-       setFormStatus("Password can not be blank.")
-       setCloseIcon(true);  
-       setModalShow(true)
-       setMsgType('error') 
+
     }else if(!inputData.type){
        setFormStatus("Please select user role.")
        setCloseIcon(true); 
        setModalShow(true)
        setMsgType('error')                               
     }else{
-      inputData.userid = profileData && profileData.userid ? profileData.userid : '';
-      inputData.updatedBy = profileData && profileData.updatedBy ? profileData.updatedBy : '' 
-      axios.post(`${process.env.API_BASE_URL}adduser.php`,inputData,{
+      inputData.userid = params && params.user ? params.user : '';
+      inputData.updatedBy = userid ? userid : null 
+      axios.post(`${process.env.API_BASE_URL}updateUser.php`,inputData,{
         headers: {
         'Content-Type': 'multipart/form-data'
       }
@@ -119,19 +96,9 @@ const EditUser = ({params})=>{
                 setMsgType('error')
             }else if(res &&  res.data && res.data.msg && res.data.msg.length > 0){
                     //Router.push('/thankyou')
-                    setFormStatus("User added successfully.");
+                    setFormStatus(res.data.msg);
                     setMsgType('success')
                     setModalShow(true)
-                    setInputData({
-                      companyname : '',
-                      name : '',
-                      email : '',
-                      mangerId:'',
-                      contactno : '',
-                      type:'',
-                      password : ''
-                  });
- 
                     setCloseIcon(true);
                     setSubmitBtn({
                       padding: '1rem 0rem',
@@ -152,36 +119,20 @@ const EditUser = ({params})=>{
        .then(res => {
        // setLearningData(data);
        setInputData({
-         userid : res.data[0]['userid'],
+         userid : params.user,
          name : res.data[0]['name'],
-         title : res.data[0]['title'],
          email : res.data[0]['email'],
          type : res.data[0]['type'],
-         contactno : res.data[0]['contactno'],
-         status : res.data[0]['status'],
-         image : res.data[0]['image'],
-         password : '',
-         // userid : localStorage && localStorage.userid ? localStorage.userid : '' 
+         status : res.data[0]['status']
        })
-    //    setInputData({        
-    //     userid : res.data[0]['userid'],
-    //     name : res.data[0]['name'],
-    //     title : res.data[0]['title'],
-    //     type : res.data[0]['type'],
-    //     contactno : res.data[0]['contactno'],
-    //     status : res.data[0]['status'],
-    //     image : res.data[0]['image'],
-    //     password : '',
-    //      })
-        //  if(res.data[0]['mangerId'] && res.data[0]['type']=='user'){
-        //    setShowManager(true)
-        //  }
        setLoading(true);
     })
     .catch(err => {
     })
     }
  }
+ const [userid,setUserId] = useState(null)
+
   useEffect(() => {
     if (typeof window !== 'undefined' && window.localStorage) {
         getUser()
@@ -196,20 +147,7 @@ const EditUser = ({params})=>{
     //    let logo = localStorage.getItem('logo');
        let updatedBy = localStorage.getItem('tokenAuth');
        let userid = localStorage.getItem('userid');
-    //    setInputData({
-    //       companyname : companyname ? companyname:'',
-    //       title : title ? title :'',
-    //       name : name ? name : '',
-    //       email : email ? email :'',
-    //       contactno : contactno ? contactno : '',
-    //       about : about ? about : '',
-    //       location : location ? location : '',
-    //       image : image ? image : '',
-    //       logo : logo ? logo :'',
-    //       updatedBy : updatedBy ? updatedBy : '',
-    //       userid : userid ? userid: null
-    //   });
- 
+       setUserId(updatedBy)
     }
     }, []);
     return(
@@ -253,25 +191,14 @@ const EditUser = ({params})=>{
                                     <div className='col-md-6'>
                                         <div className='form-group'>
                                             <level>Email*</level>
-                                            <input type='text' placeholder='Email*'  onChange={inputChangeData} name="email" value={inputData.email}/>
+                                            <input type='text' placeholder='Email*'  onChange={inputChangeData} name="email" value={inputData.email} readOnly/>
                                         </div>
                                     </div>                                   
                                     <div className='col-md-6'>
                                         <div className='form-group'>
-                                            <level>Password*</level>
-                                            <input type='password' placeholder='Password*'  onChange={inputChangeData} name="password" value={inputData.password}/>
-                                        </div>
-                                    </div>
-                                    {/* <div className='col-md-6'>
-                                        <div className='form-group'>
-                                            <level>Confirm Password*</level>
-                                            <input type='password' placeholder='Confirm Password*'/>
-                                        </div>
-                                    </div> */}
-                                    <div className='col-md-6'>
-                                        <div className='form-group'>
                                             <level>Role*</level>
                                             <select onChange={inputChangeData} name="type">
+                                            <option value={inputData.type}>{inputData.type ? inputData.type.toUpperCase() : ''}</option>
                                                 <option value="">Select</option>
                                                 <option value="User">User</option>
                                                 <option value="Manager">Manager</option>

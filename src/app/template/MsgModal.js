@@ -6,7 +6,7 @@ const MsgModal =(props)=> {
   Swal.fire({
     title: props && props.msg ? props.msg :'',
     text: '',
-    icon: props && props.msgType ? props.msgType :'error',
+    icon: props && props.msgType ? props.msgType :'',
     confirmButtonText: 'ok'
   })
   return (

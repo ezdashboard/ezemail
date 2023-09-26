@@ -33,6 +33,8 @@ const Addmore=()=>{
       genratedFrom:''
    })
    const inputChangeData =(event)=> {
+      setModalShow(false)
+      setMsgType('')
       const {name, value} = event.target;
         setInputData((valuePre)=>{
        return{
@@ -100,30 +102,52 @@ const Addmore=()=>{
       if(inputData && inputData.primaryEmail){
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         setIsValidEmail(emailRegex.test(inputData.primaryEmail));
-    
+
       }
-      if(!inputData.primaryEmail){
+      if(!inputData.leadGenFor){
+        setFormStatus("Please select Lead genrate for.")
+        setModalShow(true)
+        setMsgType('error')
+      }else if(!inputData.leadDate){
+         setFormStatus("Lead date can not be blank.")
          setModalShow(true)
-        setFormStatus("Name can not be blank.")
-        setCloseIcon(true);
-      // }else if(!inputData.type){
-      //   setFormStatus("Please select user type.")
-      //   setCloseIcon(true);   
-      // }else if(inputData.type && inputData.type == 'user' && !inputData.mangerId){
-      //   setFormStatus("Please select manager.")
-      //   setCloseIcon(true);         
-      // }else if(!inputData.email){
-      //   setFormStatus("Email can not be blank.")
-      //   setCloseIcon(true);  
-      // }else if(!inputData.companyname){
-      //   setFormStatus("Company Name can not be blank.")
-      //   setCloseIcon(true);  
-      // }else if(!inputData.contactno){
-      //   setFormStatus("Phone Number can not be blank.")
-      //   setCloseIcon(true);  
-      // }else if(!inputData.password){
-      //   setFormStatus("Password can not be blank.")
-      //   setCloseIcon(true);                                  
+         setMsgType('error')  
+      }else if(!inputData.clientName){
+         setFormStatus("Client name can not be blank.")
+         setModalShow(true)
+         setMsgType('error')          
+      }else if(!inputData.primaryEmail){
+        setFormStatus("Primary Email can not be blank.")
+        setModalShow(true)
+        setMsgType('error')  
+      }else if(!inputData.secondaryEmail){
+         setFormStatus("Secondary Email can not be blank.")
+         setModalShow(true)
+         setMsgType('error')  
+      }else if(!inputData.websiteUrl){
+         setFormStatus("Website url can not be blank.")
+         setModalShow(true)
+         setMsgType('error') 
+      }else if(!inputData.contactNumber){
+         setFormStatus("Contact Number can not be blank.")
+         setModalShow(true)
+         setMsgType('error')   
+      }else if(!inputData.services){
+         setFormStatus("Please select services.")
+         setModalShow(true)
+         setMsgType('error')  
+      }else if(!inputData.industry){
+         setFormStatus("Industry can not be blank.")
+         setModalShow(true)
+         setMsgType('error')  
+      }else if(!inputData.country){
+         setFormStatus("Please select country.")
+         setModalShow(true)
+         setMsgType('error')   
+      }else if(!inputData.genratedFrom){
+         setFormStatus("Generated from Domain/General Ids  can not be blank.")
+         setModalShow(true)
+         setMsgType('error')                                                                   
       }else{
         inputData.userid = userid ? userid : '';
         inputData.updatedBy =  userid ? userid : '' 
@@ -136,10 +160,14 @@ const Addmore=()=>{
               const data = res.data;
               if(res &&  res.data && res.data.error && res.data.error.length > 0){
                   setFormStatus(res.data.error);
+                  setModalShow(true)
+                  setMsgType('error') 
                   setCloseIcon(true);
               }else if(res &&  res.data && res.data.msg && res.data.msg.length > 0){
                       //Router.push('/thankyou')
                       setFormStatus("User added successfully.");
+                      setModalShow(true)
+                      setMsgType('success') 
                       //localStorage.clear();
                       setInputData({
                         companyname : '',
@@ -206,9 +234,9 @@ const Addmore=()=>{
                         </div>
                     </div>
                     <div className='row'>
-                    <div className="col-md-12">
+                    {/* <div className="col-md-12">
                             {closeIcon  ?<span style={submitBtn}>{msg}  <span onClick={submitCloseIcon}><i className="fa fa-times" aria-hidden="true"></i></span></span>: ""}
-                    </div>
+                    </div> */}
                       <div className='col-md-12'>
                          <div className='add-more-form'>
                              <form onSubmit={onSubmit}>

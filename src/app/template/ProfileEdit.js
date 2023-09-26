@@ -2,10 +2,16 @@
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import Form from 'react-bootstrap/Form';
-
+import MsgModal from './MsgModal';
+import {useState } from 'react'
 const MyVerticallyCenteredModal =(props)=> {
   console.log('prodif',props)
+  const [modalShow, setModalShow] = useState(false);
+  const [msgType, setMsgType] = useState('')
+
   return (
+  <>
+ 
     <Modal
       {...props}
       size="lg"
@@ -35,22 +41,18 @@ const MyVerticallyCenteredModal =(props)=> {
             <Form.Control type="number" placeholder="Mobile Number" onChange={props.inputChangeData} name="contactno" value={props.inputData.contactno}/>
           </Form.Group>  
           <Button variant="primary" type="submit">
-              Update profile
+              Update  
           </Button>
-          {/* <Form.Group className="mb-3" controlId="exampleForm.ControlInput1"> 
-                   <Form.Label>Name</Form.Label>
-            <Form.Control type="email" placeholder="Name" />
-          </Form.Group>           */}
-          {/* <Form.Group className="mb-3" controlId="exampleForm.ControlTextarea1">
-            <Form.Label>Example textarea</Form.Label>
-            <Form.Control as="textarea" rows={3} />
-          </Form.Group> */}
         </Form>
       </Modal.Body>
-      <Modal.Footer>
-        {/* <Button onClick={props.onHide}>Close</Button> */}
-      </Modal.Footer>
     </Modal>
+    {modalShow &&
+                            <MsgModal 
+                            msgType={msgType}
+                            msg={msg}
+                            />
+                        }
+    </>
   );
 }
 

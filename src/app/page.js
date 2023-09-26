@@ -6,6 +6,7 @@ import { React,useState } from 'react';
 import axios from 'axios';
 import { useRouter } from 'next/navigation';
 import Spinner from 'react-bootstrap/Spinner';
+import MsgModal from './template/MsgModal';
 
 const roboto=Roboto({
   weight:'900',
@@ -24,7 +25,9 @@ function Login() {
   const [isLoading, setLoading] = useState(false)
   const [closeIcon, setCloseIcon] = useState(false)
   const [isValidEmail, setIsValidEmail] = useState(false)
-  const [msg, setFormStatus] = useState('')
+  const [msg, setFormStatus] = useState('') 
+  const [modalShow, setModalShow] = useState(false);
+  const [msgType, setMsgType] = useState('')
   const [submitBtn, setSubmitBtn] = useState({})
   const submitCloseIcon = ()=>{
     setCloseIcon(false);
@@ -34,6 +37,7 @@ function Login() {
     password:''
   });
   const handleChange =(event)=> {
+    setModalShow(false)
     const {name, value} = event.target;
     // console.log('hlo', value)
     setInputData((valuePre)=>{
@@ -46,15 +50,20 @@ function Login() {
   }
   const submitLogin =(e)=> {
     setFormStatus("");
+    setModalShow(false)
     if(!inputData.email){
       setFormStatus("Email can not be blank.")
       setCloseIcon(true);
+      setModalShow(true)
+      setMsgType('error')
     // }else if(!isValidEmail){
     //   setFormStatus("Invalid Email.")
     //   setCloseIcon(true);
   }else if(!inputData.password){
       setFormStatus("Password can not be blank.")
       setCloseIcon(true);  
+      setModalShow(true)
+      setMsgType('error')
   }else{
     setLoading(true)
     axios.post(`${process.env.API_BASE_URL}login.php`,inputData,{
@@ -65,15 +74,15 @@ function Login() {
           const data = res.data;
           if(res &&  res.data && res.data.error && res.data.error.length > 0){
               setFormStatus( res.data.error);
+              setModalShow(true)
+              setMsgType('error')
               setCloseIcon(true);
               setLoading(false)
           }else{
               if(data){
-                  setInputData({
-                    email:"",
-                    password:""
-                  })
-                  setFormStatus("");
+                setModalShow(false)
+                setMsgType('')
+                setFormStatus("");
                   //setCloseIcon(true);
                   setSubmitBtn({
                     padding: '1rem 0rem',
@@ -94,10 +103,11 @@ function Login() {
                       localStorage.setItem("contactno", data.userData[0]['contactno']);
                       localStorage.setItem("about", data.userData[0]['about']);  
                       localStorage.setItem("location", data.userData[0]['location']);
+                      setLoading(false)
                       router.push('/dashboard')
                   }
                 }
-                setLoading(false)
+               
           }
 
     })
@@ -117,9 +127,9 @@ function Login() {
         <div className="col-md-12">
            <div className="login-form ">
              <form  className="login ">
-             <div className="col-md-12">
+             {/* <div className="col-md-12">
                         {closeIcon  ?<span style={submitBtn}>{msg}  <span onClick={submitCloseIcon}><i className="fa fa-times" aria-hidden="true"></i></span></span>: ""}
-             </div>
+             </div> */}
              <h1 className={roboto.className}>Log In To LMS</h1> 
               {isLoading &&
                 <div className='loader'>
@@ -139,6 +149,12 @@ function Login() {
                 }
               </form>
             </div>  
+            {modalShow &&
+                        <MsgModal 
+                           msgType={msgType}
+                           msg={msg}
+                        />
+                     }
         </div>
      </div>
     </div>
