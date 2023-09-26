@@ -1,5 +1,4 @@
 "use client"
-
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faHouse,faPenToSquare } from '@fortawesome/free-solid-svg-icons'
@@ -15,6 +14,7 @@ import axios from 'axios';
 const Users=()=>{
     const [currentPage, setCurrentPage] = useState(1);
     const [limitp, setlimitp] =useState(5);
+    const [pageList, setPageList] = useState([1,2,3]);
     const [userType, setUserType] = useState('')
     const [totalPages, setPageCount] = useState(1);
     const [userStoreData, setUserStoreData] = useState([]);
@@ -85,7 +85,6 @@ const Users=()=>{
      } 
       useEffect(() => {
         if (typeof window !== 'undefined' && window.localStorage) {
-
               let companyname = localStorage.getItem('companyname');
               let title = localStorage.getItem('title');
               let name = localStorage.getItem('name');
@@ -118,8 +117,7 @@ const Users=()=>{
            setUserType(localType)
           }
           }, [currentPage]);
-    return(
-        
+      return(
         <>
          <div className='page_-full-wrapper'>
            <Sidebaar/>
@@ -133,14 +131,14 @@ const Users=()=>{
                             <div className="breadcrumb__wrapper">
                                 <div className="breadcrumb__inner">
                                     <div className="breadcrumb__icon">
-                                    <FontAwesomeIcon icon={faHouse}/>
+                                      <FontAwesomeIcon icon={faHouse}/>
                                     </div>
                                     <div className="breadcrumb__menu">
                                         <nav>
-                                        <ul>
-                                            <li><span><a href="#">Home</a></span></li>
-                                            <li className="active"><span>User List</span></li>
-                                        </ul>
+                                          <ul>
+                                              <li><span><a href="#">Home</a></span></li>
+                                              <li className="active"><span>User List</span></li>
+                                          </ul>
                                         </nav>
                                     </div>
                                 </div>
@@ -160,8 +158,8 @@ const Users=()=>{
                                 <div className='add-more'>
                                 <Link href='/add-user'>Add User</Link>
                               </div>}
-                              <div className='lms-table-wrap'>
-                               <Table striped bordered hover >
+                              <div className='lms-table-wrap-p'>
+                               <Table >
                                 <thead>
                                     <tr>
                                     <th>S.No.</th>
@@ -183,14 +181,37 @@ const Users=()=>{
                                         <td>{users.contactno}</td>
                                         <td>{users.type}</td>
                                         <td>{users.status}</td>
-                                        <td><FontAwesomeIcon icon={faPenToSquare} /></td>
+                                        <td><Link href={'/users/'+users.id}><FontAwesomeIcon icon={faPenToSquare} /></Link></td>
                                     </tr>
                                     )})}
                                 </tbody>
                                 </Table>
                               </div>
                             <div className='pagination-wrap'>
-                                <Pagination>{items}</Pagination>
+                            <div className="pagination-wrap" bis_skin_checked="1">
+                              <ul className="pagination">
+                                {/* <li className="page-item">
+                                  <a className="page-link" role="button" tabindex="0" href="#">1</a>
+                                  </li> */}
+                                  {/* <li className="page-item active"><span className="page-link">2<span className="visually-hidden">(current)</span></span></li> */}
+                                  {pageList.map((data, i)=>{
+
+                              return(
+                                <li key={i} onClick={()=>{
+                              setCurrentPage(data)}} className={currentPage == data ? 'page-item active' : 'page-item'}>
+                                {currentPage != data && <a href="#" className='page-link'>{data}</a>}
+                                {currentPage == data && 
+                                <span className="page-link">{currentPage}<span className="visually-hidden">(current)</span></span>
+                                }
+                                </li>
+                                          )
+                                      })}                            
+                                  {/* <li className="page-item"><a className="page-link" role="button" tabindex="0" href="#">3</a></li>
+                                  <li className="page-item"><a className="page-link" role="button" tabindex="0" href="#">4</a></li>
+                                  <li className="page-item"><a className="page-link" role="button" tabindex="0" href="#">5</a></li> */}
+                                  </ul>
+                            </div>
+                                {/* <Pagination>{items}</Pagination> */}
                             </div>
                         </div>
                     </div>

@@ -8,13 +8,16 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faHouse } from '@fortawesome/free-solid-svg-icons'
 import axios from 'axios';
 import Link from 'next/link';
+import MsgModal from '../template/MsgModal';
+
 
 const Addmore=()=>{
    const [sideBarAccess, setSideBarAccess] = useState({
       users: false
    });
-   const [userType, setUserType] = useState('')
 
+   const [userType, setUserType] = useState('')
+   const [userid, setUserid] = useState(null)
    const [inputData, setInputData] = useState({
       leadGenBy: null,
       leadGenFor:'',
@@ -40,6 +43,16 @@ const Addmore=()=>{
    }
    const [serviceStoreData, setServiceStoreData] = useState([]);
    const [countryList, setCountryList] = useState([]);
+   const [msg, setFormStatus] = useState('')
+   const [submitBtn, setSubmitBtn] = useState({})
+   const [closeIcon, setCloseIcon] = useState(false)
+   const [isValidEmail, setIsValidEmail] = useState(false)
+   const [modalShow, setModalShow] = useState(false);
+   const [msgType, setMsgType] = useState('')
+
+   const submitCloseIcon = ()=>{
+      setCloseIcon(false);
+    }
    const sideCanvasActive= () =>{ 
          $(".expovent__sidebar").removeClass("collapsed");
          $(".expovent__sidebar").removeClass("open");
@@ -76,15 +89,92 @@ const Addmore=()=>{
       })
       .catch(err => {
          })
-   }                
+   }
+   const onSubmit = (e) => {
+      e.preventDefault()
+      setSubmitBtn({
+        padding: '1rem 0rem',
+        display: 'block',
+        color: 'red'
+      });
+      if(inputData && inputData.primaryEmail){
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        setIsValidEmail(emailRegex.test(inputData.primaryEmail));
+    
+      }
+      if(!inputData.primaryEmail){
+         setModalShow(true)
+        setFormStatus("Name can not be blank.")
+        setCloseIcon(true);
+      // }else if(!inputData.type){
+      //   setFormStatus("Please select user type.")
+      //   setCloseIcon(true);   
+      // }else if(inputData.type && inputData.type == 'user' && !inputData.mangerId){
+      //   setFormStatus("Please select manager.")
+      //   setCloseIcon(true);         
+      // }else if(!inputData.email){
+      //   setFormStatus("Email can not be blank.")
+      //   setCloseIcon(true);  
+      // }else if(!inputData.companyname){
+      //   setFormStatus("Company Name can not be blank.")
+      //   setCloseIcon(true);  
+      // }else if(!inputData.contactno){
+      //   setFormStatus("Phone Number can not be blank.")
+      //   setCloseIcon(true);  
+      // }else if(!inputData.password){
+      //   setFormStatus("Password can not be blank.")
+      //   setCloseIcon(true);                                  
+      }else{
+        inputData.userid = userid ? userid : '';
+        inputData.updatedBy =  userid ? userid : '' 
+        axios.post(`${process.env.API_BASE_URL}addmore.php`,inputData,{
+          headers: {
+          'Content-Type': 'multipart/form-data'
+        }
+      })
+          .then(res => {
+              const data = res.data;
+              if(res &&  res.data && res.data.error && res.data.error.length > 0){
+                  setFormStatus(res.data.error);
+                  setCloseIcon(true);
+              }else if(res &&  res.data && res.data.msg && res.data.msg.length > 0){
+                      //Router.push('/thankyou')
+                      setFormStatus("User added successfully.");
+                      //localStorage.clear();
+                      setInputData({
+                        companyname : '',
+                        name : '',
+                        email : '',
+                        mangerId:'',
+                        contactno : '',
+                        type:'',
+                        password : ''
+                    });
+                      setCloseIcon(true);
+                      setSubmitBtn({
+                        padding: '1rem 0rem',
+                        display: 'block',
+                        color: '#46c737'
+                      })
+                    }
+    
+        })
+        .catch(err => {
+         })
+      }
+    }                
    useEffect(() => {
       if (typeof window !== 'undefined' && window.localStorage) {
          let localType = localStorage.getItem('type');
+         let userid = localStorage.getItem('tokenAuth');
+
          if(localType){
           setUserType(localType)
-         }  
+         }
+         setUserid(userid)
+         getServiceData()
+         getCountryData()  
       }
-   
       }, []);
 
  return(
@@ -94,6 +184,7 @@ const Addmore=()=>{
             <div className="app__offcanvas-overlay" onClick={sideCanvasActive}></div>
               <div className="page__body-wrapper">
                <Header/>
+               
                <div className="app__slide-wrapper">
                     <div className="row">
                         <div className="col-xl-12">
@@ -115,9 +206,12 @@ const Addmore=()=>{
                         </div>
                     </div>
                     <div className='row'>
+                    <div className="col-md-12">
+                            {closeIcon  ?<span style={submitBtn}>{msg}  <span onClick={submitCloseIcon}><i className="fa fa-times" aria-hidden="true"></i></span></span>: ""}
+                    </div>
                       <div className='col-md-12'>
                          <div className='add-more-form'>
-                             <form>
+                             <form onSubmit={onSubmit}>
                                 <div className='row'>
                                    {/* <div className='col-md-6'>
                                       <div className='form-group'>
@@ -224,6 +318,11 @@ const Addmore=()=>{
                     </div>
                 </div>
               </div>
+               {modalShow &&
+              <MsgModal 
+              msgType={msgType}
+              msg={msg}
+              />}
       </div>
     </>
  )

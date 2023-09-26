@@ -7,6 +7,7 @@ import Header from '../template/Header';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faHouse } from '@fortawesome/free-solid-svg-icons'
 import axios from 'axios';
+import MsgModal from '../template/MsgModal'
 
 const AddUser=()=>{
    const [msg, setFormStatus] = useState('')
@@ -14,7 +15,8 @@ const AddUser=()=>{
    const [closeIcon, setCloseIcon] = useState(false)
    const [isValidEmail, setIsValidEmail] = useState(false)
    const [showManager, setShowManager] = useState(false)
-
+   const [modalShow, setModalShow] = useState(false);
+   const [msgType, setMsgType] = useState('')
    const [inputData, setInputData] = useState({
       companyname : '',
       title : '',
@@ -44,6 +46,8 @@ const AddUser=()=>{
    userid : ''
 });
    const inputChangeData =(event)=> {
+      setModalShow(false)
+      setMsgType('')
    const {name, value} = event.target;
    if(name && name=="type" && value && value =="user"){
      setShowManager(true);
@@ -64,6 +68,9 @@ const sideCanvasActive= () =>{
 }
 const onSubmit = (e) => {
    e.preventDefault()
+
+   setModalShow(false)
+   setMsgType('')
    setSubmitBtn({
      padding: '1rem 0rem',
      display: 'block',
@@ -72,30 +79,29 @@ const onSubmit = (e) => {
    if(inputData && inputData.email){
      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
      setIsValidEmail(emailRegex.test(inputData.email));
- 
+     setModalShow(true)
+     setMsgType('error')
    }
    if(!inputData.name){
+      setModalShow(true)
+      setMsgType('error')
      setFormStatus("Name can not be blank.")
-     setCloseIcon(true);
-  
-   // }else if(inputData.type && inputData.type == 'user' && !inputData.mangerId){
-   //   setFormStatus("Please select manager.")
-   //   setCloseIcon(true);         
+     setCloseIcon(true);        
    }else if(!inputData.email){
      setFormStatus("Email can not be blank.")
      setCloseIcon(true);  
+     setModalShow(true)
+     setMsgType('error')
+   }else if(!inputData.password){
+      setFormStatus("Password can not be blank.")
+      setCloseIcon(true);  
+      setModalShow(true)
+      setMsgType('error') 
    }else if(!inputData.type){
       setFormStatus("Please select user role.")
       setCloseIcon(true); 
-   // }else if(!inputData.companyname){
-   //   setFormStatus("Company Name can not be blank.")
-   //   setCloseIcon(true);  
-   // }else if(!inputData.contactno){
-   //   setFormStatus("Phone Number can not be blank.")
-   //   setCloseIcon(true);  
-   }else if(!inputData.password){
-     setFormStatus("Password can not be blank.")
-     setCloseIcon(true);                                  
+      setModalShow(true)
+      setMsgType('error')                               
    }else{
      inputData.userid = profileData && profileData.userid ? profileData.userid : '';
      inputData.updatedBy = profileData && profileData.updatedBy ? profileData.updatedBy : '' 
@@ -109,9 +115,13 @@ const onSubmit = (e) => {
            if(res &&  res.data && res.data.error && res.data.error.length > 0){
                setFormStatus(res.data.error);
                setCloseIcon(true);
+               setModalShow(true)
+               setMsgType('error')
            }else if(res &&  res.data && res.data.msg && res.data.msg.length > 0){
                    //Router.push('/thankyou')
                    setFormStatus("User added successfully.");
+                   setMsgType('success')
+                   setModalShow(true)
                    setInputData({
                      companyname : '',
                      name : '',
@@ -191,11 +201,7 @@ const onSubmit = (e) => {
                             </div>
                         </div>
                     </div>
-                    <div className='row'>
-                     <div className='col-md-12'>
-                        {msg}
-                     </div>
-                    </div>
+
                     <div className='row'>
                       <div className='col-md-12'>
                          <div className='add-more-form'>
@@ -247,9 +253,15 @@ const onSubmit = (e) => {
                          </div>
                       </div>
                     </div>
+                    {modalShow &&
+                        <MsgModal 
+                           msgType={msgType}
+                           msg={msg}
+                        />
+                     }
                 </div>
               </div>
-         </div>
+      </div>
     </>
  )
 
