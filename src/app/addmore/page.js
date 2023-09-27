@@ -112,40 +112,40 @@ const Addmore=()=>{
          setFormStatus("Lead date can not be blank.")
          setModalShow(true)
          setMsgType('error')  
-      }else if(!inputData.clientName){
-         setFormStatus("Client name can not be blank.")
-         setModalShow(true)
-         setMsgType('error')          
+      // }else if(!inputData.clientName){
+      //    setFormStatus("Client name can not be blank.")
+      //    setModalShow(true)
+      //    setMsgType('error')          
       }else if(!inputData.primaryEmail){
         setFormStatus("Primary Email can not be blank.")
         setModalShow(true)
         setMsgType('error')  
-      }else if(!inputData.secondaryEmail){
-         setFormStatus("Secondary Email can not be blank.")
-         setModalShow(true)
-         setMsgType('error')  
-      }else if(!inputData.websiteUrl){
-         setFormStatus("Website url can not be blank.")
-         setModalShow(true)
-         setMsgType('error') 
-      }else if(!inputData.contactNumber){
-         setFormStatus("Contact Number can not be blank.")
-         setModalShow(true)
-         setMsgType('error')   
+      // }else if(!inputData.secondaryEmail){
+      //    setFormStatus("Secondary Email can not be blank.")
+      //    setModalShow(true)
+      //    setMsgType('error')  
+      // }else if(!inputData.websiteUrl){
+      //    setFormStatus("Website url can not be blank.")
+      //    setModalShow(true)
+      //    setMsgType('error') 
+      // }else if(!inputData.contactNumber){
+      //    setFormStatus("Contact Number can not be blank.")
+      //    setModalShow(true)
+      //    setMsgType('error')   
       }else if(!inputData.services){
          setFormStatus("Please select services.")
          setModalShow(true)
          setMsgType('error')  
-      }else if(!inputData.industry){
-         setFormStatus("Industry can not be blank.")
-         setModalShow(true)
-         setMsgType('error')  
+      // }else if(!inputData.industry){
+      //    setFormStatus("Industry can not be blank.")
+      //    setModalShow(true)
+      //    setMsgType('error')  
       }else if(!inputData.country){
          setFormStatus("Please select country.")
          setModalShow(true)
          setMsgType('error')   
       }else if(!inputData.genratedFrom){
-         setFormStatus("Generated from Domain/General Ids  can not be blank.")
+         setFormStatus("Please select generated from.")
          setModalShow(true)
          setMsgType('error')                                                                   
       }else{
@@ -249,7 +249,7 @@ const Addmore=()=>{
                                    </div> */}
                                    <div className='col-md-6'>
                                       <div className='form-group'>
-                                         <level>Lead Generated For</level>
+                                         <level>Lead Generated For*</level>
                                          <select name="leadGenFor"  onChange={inputChangeData} >
                                             <option value="">Select</option>
                                             <option value="EZ">EZ</option>
@@ -262,7 +262,7 @@ const Addmore=()=>{
                                    </div>
                                    <div className='col-md-6'>
                                       <div className='form-group'>
-                                         <level>Lead Date</level>
+                                         <level>Lead Date*</level>
                                          <input type='date' placeholder='Lead Date' onChange={inputChangeData} name="leadDate" value={inputData.leadDate}/>
                                       </div>
                                    </div>
@@ -298,7 +298,7 @@ const Addmore=()=>{
                                    </div>
                                    <div className='col-md-6'>
                                       <div className='form-group'>
-                                         <level>Services</level>
+                                         <level>Services*</level>
                                          <select name="services"  onChange={inputChangeData} >
                                          <option value="">Select</option>
                                           {serviceStoreData && serviceStoreData.length > 0 && serviceStoreData.map((serv,s)=>{
@@ -317,12 +317,12 @@ const Addmore=()=>{
                                    </div>
                                    <div className='col-md-6'>
                                       <div className='form-group'>
-                                         <level>Country</level>
+                                         <level>Country*</level>
                                          <select name="country"  onChange={inputChangeData}>
                                                 <option value="">Select</option>
                                           {countryList && countryList.length > 0 && countryList.map((coun,c)=>{
                                              return(
-                                                <option value={coun.id} key={c}>{coun.name}</option>
+                                                <option value={coun.name} key={c}>{coun.name}</option>
                                              )
                                           })}
                                          </select> 
@@ -331,7 +331,11 @@ const Addmore=()=>{
                                    <div className='col-md-6'>
                                       <div className='form-group'>
                                          <level>Generated from Domain/General Ids</level>
-                                         <input type='text' placeholder='Generated from Domain/General Ids' onChange={inputChangeData} name="genratedFrom" value={inputData.genratedFrom}/>
+                                         <select name="genratedFrom"  onChange={inputChangeData} >
+                                            <option value="">Select</option>
+                                            <option value="Domain">Domain</option>
+                                            <option value="General Ids">General Ids</option>
+                                         </select>
                                       </div>
                                    </div>
                                    <div className='col-md-6'>
