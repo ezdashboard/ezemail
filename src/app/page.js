@@ -103,16 +103,16 @@ function Login() {
                       localStorage.setItem("contactno", data.userData[0]['contactno']);
                       localStorage.setItem("about", data.userData[0]['about']);  
                       localStorage.setItem("location", data.userData[0]['location']);
-                      setLoading(false)
                       router.push('/dashboard')
+                      //setLoading(false)
                   }
                 }
-               
           }
-
     })
     .catch(err => {
-      setLoading(false)
+      if(err){
+        setLoading(false)
+      }
      })
   }
 }
@@ -121,7 +121,6 @@ function Login() {
 <>
 <Head>
 </Head>
-
   <div className="container">
      <div className="row">
         <div className="col-md-12">

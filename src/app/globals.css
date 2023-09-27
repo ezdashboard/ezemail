@@ -821,5 +821,10 @@ add more page css start here
 /* ==========================
 add more page css end here 
 ==============================*/
-
+.nofound{
+  text-align: center;
+    margin-top: 10px;
+    font-size: 20px;
+    font-weight: 400;
+}
 

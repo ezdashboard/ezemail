@@ -37,6 +37,7 @@ const Dashbord=()=>{
     const [inputData, setInputData] =useState({
         search:''
     })
+    const [msg, setMsg] = useState('');
     const inputChangeData =(event)=> {
 
      const {name, value} = event.target;
@@ -48,33 +49,40 @@ const Dashbord=()=>{
      }
    });
      }
-    const getLeadsData = async () => {
-
-        axios.get(`${process.env.API_BASE_URL}leads.php?updatedBy=${userId}&ser=${inputData.search}`)
-          .then(res => {
-              const data = res.data.leadRecordsData.map((item) => {
-                return {
-                  id: item.id,
-                  clientName: item.clientName,
-                  create_at: item.create_at,
-                  leadDate:  item.leadDate,
-                  leadGenFor: item.leadGenFor,
-                  primaryEmail: item.primaryEmail,
-                  secondaryEmail:item.secondaryEmail,
-                  websiteUrl:item.websiteUrl,
-                  contactNumber:item.contactNumber,
-                  industry:item.industry,
-                  country:item.country,
-                  genratedFrom:item.genratedFrom,
-                  leadGenBy: item.leadGenBy,
-                  serviceName: item.serviceName
-                }
+    const getLeadsData = async (userid) => {
+        setMsg("");
+        if(userid){
+            axios.get(`${process.env.API_BASE_URL}leads.php?updatedBy=${userid}&ser=${inputData.search}`)
+            .then(res => {
+                if(res && res.data && res.data.leadRecordsData && res.data.leadRecordsData.length > 0){
+                const data = res.data.leadRecordsData.map((item) => {
+                  return {
+                    id: item.id,
+                    clientName: item.clientName,
+                    create_at: item.create_at,
+                    leadDate:  item.leadDate,
+                    leadGenFor: item.leadGenFor,
+                    primaryEmail: item.primaryEmail,
+                    secondaryEmail:item.secondaryEmail,
+                    websiteUrl:item.websiteUrl,
+                    contactNumber:item.contactNumber,
+                    industry:item.industry,
+                    country:item.country,
+                    genratedFrom:item.genratedFrom,
+                    leadGenBy: item.leadGenBy,
+                    serviceName: item.serviceName
+                  }
+              }
+            )
+            
+            setLeadStoreData(data);
+            }else if(res.data.msg){
+                setMsg(res.data.msg)
             }
-          )
-          setLeadStoreData(data);
-        })
-        .catch(err => {
-         })
+          })
+          .catch(err => {
+           })
+        }
      } 
         const [userId, seTuserId] = useState(null)
         useEffect(() => {
@@ -83,8 +91,10 @@ const Dashbord=()=>{
                let userid = localStorage.getItem('tokenAuth');
                if(userid){
                 seTuserId(userid);
-                getLeadsData();
-
+                // setTimeout(function() {
+                    
+                // }, 10000);
+                getLeadsData(userid)
                }
                if(localType){
                 setUserType(localType)
@@ -126,7 +136,9 @@ const Dashbord=()=>{
                             <div className='email-serach-box'>
                               <form  className="serach">
                                 <input type="text" placeholder="Email"  onChange={inputChangeData} name="search" value={inputData.search}/>
-                                <button type="button" onClick={getLeadsData}>Search</button>
+                                <button type="button" onClick={()=>{
+                                    getLeadsData(userId)
+                                }}>Search</button>
                                 </form>
                               </div>
 {                           userType &&   
@@ -172,8 +184,10 @@ const Dashbord=()=>{
                                     </tr>
                                     )
                                 })}
+                               
                                 </tbody>
                                 </Table>
+                                {msg && <p className='nofound'>{msg}</p>}
                               </div>
                             <div className='pagination-wrap'>
                                 <Pagination>{items}</Pagination>
