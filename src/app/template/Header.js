@@ -32,6 +32,10 @@ const Header =()=>{
     }
     useEffect(() => {
         if (typeof window !== 'undefined' && window.localStorage) {
+            let userid = localStorage.getItem('tokenAuth');
+            if(!userid){
+             router.push('/')
+            }
            let name = localStorage.getItem('name');
            if(name){
             setName(name)
