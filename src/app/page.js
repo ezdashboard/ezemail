@@ -117,13 +117,12 @@ function Login() {
   }
 }
 useEffect(() => {
-  if (typeof window !== 'undefined' && window.localStorage) {
-     let userid = localStorage.getItem('tokenAuth');
-     if(userid){
-      router.push('/dashboard')
-     }
-  }
-
+    if (typeof window !== 'undefined' && window.localStorage) {
+      let userid = localStorage.getItem('tokenAuth');
+      if(userid){
+        router.push('/dashboard')
+      }
+    }
   }, []);
   return (
 <>

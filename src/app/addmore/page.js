@@ -224,7 +224,7 @@ const Addmore=()=>{
                                     <div className="breadcrumb__menu">
                                         <nav>
                                         <ul>
-                                            <li><span><Link href="#">Home</Link></span></li>
+                                            <li><span><Link href="/dashboard">Home</Link></span></li>
                                             <li className="active"><span>Add More</span></li>
                                         </ul>
                                         </nav>

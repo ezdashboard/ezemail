@@ -5,7 +5,7 @@ import Form from 'react-bootstrap/Form';
 import MsgModal from './MsgModal';
 import {useState } from 'react'
 const MyVerticallyCenteredModal =(props)=> {
-  console.log('prodif',props)
+  //console.log('prodif',props)
   const [modalShow, setModalShow] = useState(false);
   const [msgType, setMsgType] = useState('')
 
@@ -21,9 +21,9 @@ const MyVerticallyCenteredModal =(props)=> {
       <Modal.Header closeButton>
         <Modal.Title id="contained-modal-title-vcenter">
           Profile update
-          <p style={{textAlign: 'center',
+          {/* <p style={{textAlign: 'center',
     color: '#95f095',
-    fontWeight: '400'}}>{props.msg}</p>
+    fontWeight: '400'}}>{props.msg}</p> */}
         </Modal.Title>
       </Modal.Header>
       <Modal.Body>
@@ -46,10 +46,10 @@ const MyVerticallyCenteredModal =(props)=> {
         </Form>
       </Modal.Body>
     </Modal>
-    {modalShow &&
+    {props.msg && props.show &&
                             <MsgModal 
-                            msgType={msgType}
-                            msg={msg}
+                            msgType={'success'}
+                            msg={props.msg}
                             />
                         }
     </>

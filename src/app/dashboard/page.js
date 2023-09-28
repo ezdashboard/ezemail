@@ -14,7 +14,9 @@ import axios from 'axios';
 
 const Dashbord=()=>{
     const [userType, setUserType] = useState('')
-
+    const [pageList, setPageList] = useState([1,2,3]);
+    const [currentPage, setCurrentPage] = useState(1);
+    const [limitp, setlimitp] =useState(5);
     const sideCanvasActive= () =>{ 
         $(".expovent__sidebar").removeClass("collapsed");
         $(".expovent__sidebar").removeClass("open");
@@ -52,7 +54,7 @@ const Dashbord=()=>{
     const getLeadsData = async (userid) => {
         setMsg("");
         if(userid){
-            axios.get(`${process.env.API_BASE_URL}leads.php?updatedBy=${userid}&ser=${inputData.search}`)
+            axios.get(`${process.env.API_BASE_URL}leads.php?updatedBy=${userid}&page=${currentPage}ser=${inputData.search}`)
             .then(res => {
                 if(res && res.data && res.data.leadRecordsData && res.data.leadRecordsData.length > 0){
                 const data = res.data.leadRecordsData.map((item) => {
@@ -101,7 +103,7 @@ const Dashbord=()=>{
                }  
             }
 
-            }, []);
+            }, [currentPage]);
     return(
         
         <>
@@ -122,7 +124,7 @@ const Dashbord=()=>{
                                     <div className="breadcrumb__menu">
                                         <nav>
                                         <ul>
-                                            <li><span><a href="#">Home</a></span></li>
+                                            <li><span><Link href="#">Home</Link></span></li>
                                             <li className="active"><span>Dashboard</span></li>
                                         </ul>
                                         </nav>
@@ -189,9 +191,35 @@ const Dashbord=()=>{
                                 </Table>
                                 {msg && <p className='nofound'>{msg}</p>}
                               </div>
-                            <div className='pagination-wrap'>
-                                <Pagination>{items}</Pagination>
+                              <div className='pagination-wrap'>
+                            <div className="pagination-wrap" bis_skin_checked="1">
+                              <ul className="pagination">
+                                {/* <li className="page-item">
+                                  <a className="page-link" role="button" tabindex="0" href="#">1</a>
+                                  </li> */}
+                                  {/* <li className="page-item active"><span className="page-link">2<span className="visually-hidden">(current)</span></span></li> */}
+                                  {pageList.map((data, i)=>{
+
+                              return(
+                                <li key={i} onClick={()=>{
+                              setCurrentPage(data)}} className={currentPage == data ? 'page-item active' : 'page-item'}>
+                                {currentPage != data && <a href="#" className='page-link'>{data}</a>}
+                                {currentPage == data && 
+                                <span className="page-link">{currentPage}<span className="visually-hidden">(current)</span></span>
+                                }
+                                </li>
+                                          )
+                                      })}                            
+                                  {/* <li className="page-item"><a className="page-link" role="button" tabindex="0" href="#">3</a></li>
+                                  <li className="page-item"><a className="page-link" role="button" tabindex="0" href="#">4</a></li>
+                                  <li className="page-item"><a className="page-link" role="button" tabindex="0" href="#">5</a></li> */}
+                                  </ul>
                             </div>
+                                {/* <Pagination>{items}</Pagination> */}
+                            </div>                              
+                            {/* <div className='pagination-wrap'>
+                                <Pagination>{items}</Pagination>
+                            </div> */}
                         </div>
                     </div>
                 </div>

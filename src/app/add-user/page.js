@@ -7,6 +7,7 @@ import Header from '../template/Header';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faHouse } from '@fortawesome/free-solid-svg-icons'
 import axios from 'axios';
+import Link from 'next/link';
 import MsgModal from '../template/MsgModal'
 
 const AddUser=()=>{
@@ -192,7 +193,7 @@ const onSubmit = (e) => {
                                     <div className="breadcrumb__menu">
                                         <nav>
                                         <ul>
-                                            <li><span><a href="#">Home</a></span></li>
+                                            <li><span><Link href="/dashboard">Home</Link></span></li>
                                             <li className="active"><span>Add User</span></li>
                                         </ul>
                                         </nav>

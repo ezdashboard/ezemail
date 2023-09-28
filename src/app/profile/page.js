@@ -54,6 +54,10 @@ const [logo, setLogo] = useState('')
 const [image, setImage] = useState('')
 const [userid, setUserid] = useState(null)
 const [name, setName] =useState('')
+const closeModal =()=>{
+  setModalShow(false)
+  setFormStatus('')
+}
 const inputChangeData =(event)=> {
   const {name, value} = event.target;
   setInputData((valuePre)=>{
@@ -214,7 +218,7 @@ const inputChangeData =(event)=> {
                       <div className='body-card-wrapper'>
                         <div className='card-header-top'>
                           <div className='card-title-inner'>
-                            <h4>Profile Information</h4>
+                            <h1 style={{fontSize:'1.7rem'}}>Profile Information</h1>
                           </div>
                         </div>
                         <div className='profile-main-wrapper'>
@@ -293,8 +297,7 @@ const inputChangeData =(event)=> {
          </div>
          <MyVerticallyCenteredModal
           show={modalShow}
-          onHide={() => setModalShow(false)
-          }
+          onHide={closeModal}
           inputData={inputData}
           inputChangeData={inputChangeData}
           onSubmit={onSubmit}
