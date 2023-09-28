@@ -10,8 +10,11 @@ import Header from '../template/Header';
 import Link from "next/link"
 import axios from 'axios';
 import Loader from '../template/Loading';
+import { useRouter } from 'next/navigation';
+
 
 const Users=()=>{
+    const router = useRouter()
     const [isLoading, setLoading] = useState(true)
     const [totPage, setTotPage] = useState(0);
     const [currentPage, setCurrentPage] = useState(1);
@@ -51,6 +54,15 @@ const Users=()=>{
         .catch(err => {
             setLoading(false)
          })
+     }
+     const getPage = (url)=>{
+        setLoading(true)
+        if(url){
+        router.push(url)
+        }else{
+        setLoading(false)
+        }
+       // setLoading(false)
      } 
       useEffect(() => {
         if (typeof window !== 'undefined' && window.localStorage) {
@@ -102,17 +114,14 @@ const Users=()=>{
                     </div>
                     <div className='row'>
                         <div className='col-xl-12 col-md-12'>
-                            {/* <div className='email-serach-box'>
-                              <form  className="serach">
-                                <input type="text" placeholder="Email"  name="email" value=""/>
-                                <button type="button">Search</button>
-                                </form>
-                              </div> */}
                             { 
                              userType && userType == 'admin' &&   
                                 <div className='add-more'>
-                                <Link href='/add-user'>Add User</Link>
-                              </div>}
+                                <a href='#' onClick={()=>{
+                                    getPage('/add-user')
+                                }}>Add User</a>
+                              </div>
+                            }
                               <div className='lms-table-wrap-p'>
                                <Table >
                                 <thead>

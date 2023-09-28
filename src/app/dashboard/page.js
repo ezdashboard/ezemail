@@ -11,8 +11,11 @@ import Header from '../template/Header';
 import Link from "next/link"
 import axios from 'axios';
 import Loader from '../template/Loading'
+import { useRouter } from 'next/navigation';
 
 const Dashboard=()=>{
+
+    const router = useRouter()
     const [userType, setUserType] = useState('')
     const [totPage, setTotPage] = useState(0);
     const [isLoading, setLoading] = useState(true)
@@ -38,6 +41,16 @@ const Dashboard=()=>{
             }
         })
     }
+    const getPage = (url)=>{
+        setLoading(true)
+        if(url){
+        router.push(url)
+        //setLoading(false)
+        }else{
+        setLoading(false)
+        }
+       
+     } 
     const getLeadsData = async (userid) => {
         setMsg("");
         if(userid){
@@ -136,7 +149,9 @@ const Dashboard=()=>{
                               </div>
 {                           userType &&   
                                 <div className='add-more'>
-                                <Link href='/addmore'>Add More</Link>
+                                 <a href='#' onClick={()=>{
+                                    getPage('/addmore')
+                                }}>Add More</a>
                               </div>}
 
                               <div className='lms-table-wrap'>
