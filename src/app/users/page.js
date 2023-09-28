@@ -8,43 +8,21 @@ import Table from 'react-bootstrap/Table';
 import Sidebaar from '../template/Sidebaar';
 import Header from '../template/Header';
 import Link from "next/link"
-import Pagination from 'react-bootstrap/Pagination';
 import axios from 'axios';
 
 const Users=()=>{
+
+    const [totPage, setTotPage] = useState(0);
     const [currentPage, setCurrentPage] = useState(1);
     const [limitp, setlimitp] =useState(5);
-    const [pageList, setPageList] = useState([1,2,3]);
     const [userType, setUserType] = useState('')
-    const [totalPages, setPageCount] = useState(1);
     const [userStoreData, setUserStoreData] = useState([]);
-    const [profileData, setProfileData] = useState({
-        companyname : '',
-        title : '',
-        name : '',
-        email : '',
-        contactno : '',
-        about : '',
-        location : '',
-        image : '',
-        logo : '',
-        userid : ''
-    });
     const sideCanvasActive= () =>{ 
         $(".expovent__sidebar").removeClass("collapsed");
         $(".expovent__sidebar").removeClass("open");
-        $(".app__offcanvas-overlay").removeClass("overlay-open");
-    
+        $(".app__offcanvas-overlay").removeClass("overlay-open");    
     }
-    let active = 2;
-    let items = [];
-    for (let number = 1; number <= 5; number++) {
-    items.push(
-        <Pagination.Item key={number} active={number === active}>
-        {number}
-        </Pagination.Item>,
-    );
-    }
+
     const fetchData = async (page) => {
         axios.get(`${process.env.API_BASE_URL}users.php?page=${page}&limit=${limitp}&user=${localStorage.userid}`)
           .then(res => {
@@ -64,20 +42,9 @@ const Users=()=>{
             }
           )
           setUserStoreData(data);
-          if(res.data.total){
-            setPageCount(res.data.total);
-            if(page > 3){
-              setPageList([page-3, page-2, page-1])
-            }else if(page == 1){
-              if(res.data.total > 2){
-                setPageList(["1","2","3"]);
-              }else if(res.data.total == 2){
-                setPageList(["1","2"])
-              }else if(res.data.total ==1){
-                setPageList(["1"])
-              }
-            }
-          }
+          if(res.data.total && res.data.total > 0){
+            setTotPage(res.data.total)
+        }
           setLoading(true);
         })
         .catch(err => {
@@ -96,20 +63,6 @@ const Users=()=>{
               let logo = localStorage.getItem('logo');
               let updatedBy = localStorage.getItem('tokenAuth');
               let userid = localStorage.getItem('userid');
-
-              setProfileData({
-                companyname : companyname ? companyname:'',
-                title : title ? title :'',
-                name : name ? name : '',
-                email : email ? email :'',
-                contactno : contactno ? contactno : '',
-                about : about ? about : '',
-                location : location ? location : '',
-                image : image ? image : '',
-                logo : logo ? logo :'',
-                updatedBy : updatedBy ? updatedBy : '',
-                userid : userid ? userid: null
-              });
           }
           fetchData(currentPage);
           let localType = localStorage.getItem('type');
@@ -187,31 +140,18 @@ const Users=()=>{
                                 </tbody>
                                 </Table>
                               </div>
-                            <div className='pagination-wrap'>
-                            <div className="pagination-wrap" bis_skin_checked="1">
-                              <ul className="pagination">
-                                {/* <li className="page-item">
-                                  <a className="page-link" role="button" tabindex="0" href="#">1</a>
-                                  </li> */}
-                                  {/* <li className="page-item active"><span className="page-link">2<span className="visually-hidden">(current)</span></span></li> */}
-                                  {pageList.map((data, i)=>{
-
-                              return(
-                                <li key={i} onClick={()=>{
-                              setCurrentPage(data)}} className={currentPage == data ? 'page-item active' : 'page-item'}>
-                                {currentPage != data && <a href="#" className='page-link'>{data}</a>}
-                                {currentPage == data && 
-                                <span className="page-link">{currentPage}<span className="visually-hidden">(current)</span></span>
-                                }
-                                </li>
-                                          )
-                                      })}                            
-                                  {/* <li className="page-item"><a className="page-link" role="button" tabindex="0" href="#">3</a></li>
-                                  <li className="page-item"><a className="page-link" role="button" tabindex="0" href="#">4</a></li>
-                                  <li className="page-item"><a className="page-link" role="button" tabindex="0" href="#">5</a></li> */}
-                                  </ul>
-                            </div>
-                                {/* <Pagination>{items}</Pagination> */}
+                              <div className="pagination-wrap">
+                                <ul className="pagination">
+                                    {        currentPage > 1 &&                          
+                                        <li className="page-item" onClick={()=>{
+                                        setCurrentPage(currentPage-1)}}><a href="#" className='page-link'>{currentPage-1}</a></li>
+                                    }                                  
+                                        <li className="page-item active"><span className="page-link">{currentPage}<span className="visually-hidden">{currentPage}</span></span></li>
+                                    {        currentPage < totPage &&                          
+                                        <li className="page-item" onClick={()=>{
+                                        setCurrentPage(currentPage+1)}}><a href="#" className='page-link'>{currentPage+1}</a></li>
+                                    }
+                                </ul>                                  
                             </div>
                         </div>
                     </div>

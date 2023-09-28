@@ -12,9 +12,9 @@ import Link from "next/link"
 import Pagination from 'react-bootstrap/Pagination';
 import axios from 'axios';
 
-const Dashbord=()=>{
+const Dashboard=()=>{
     const [userType, setUserType] = useState('')
-    const [pageList, setPageList] = useState([1,2,3]);
+    const [totPage, setTotPage] = useState(0);
     const [currentPage, setCurrentPage] = useState(1);
     const [limitp, setlimitp] =useState(5);
     const sideCanvasActive= () =>{ 
@@ -23,38 +23,24 @@ const Dashbord=()=>{
         $(".app__offcanvas-overlay").removeClass("overlay-open");
     
     }
-    const [sideBarAccess, setSideBarAccess] = useState({
-        users: false
-    });
     const [leadStoreData, setLeadStoreData] = useState([]);
-    let active = 2;
-    let items = [];
-    for (let number = 1; number <= 5; number++) {
-    items.push(
-        <Pagination.Item key={number} active={number === active}>
-        {number}
-        </Pagination.Item>,
-    );
-    }
     const [inputData, setInputData] =useState({
         search:''
     })
     const [msg, setMsg] = useState('');
     const inputChangeData =(event)=> {
-
-     const {name, value} = event.target;
-     
-     setInputData((valuePre)=>{
-     return{
-       ...valuePre,
-       [name]:value
-     }
-   });
-     }
+    const {name, value} = event.target;
+        setInputData((valuePre)=>{
+            return{
+            ...valuePre,
+            [name]:value
+            }
+        })
+    }
     const getLeadsData = async (userid) => {
         setMsg("");
         if(userid){
-            axios.get(`${process.env.API_BASE_URL}leads.php?updatedBy=${userid}&page=${currentPage}ser=${inputData.search}`)
+            axios.get(`${process.env.API_BASE_URL}leads.php?updatedBy=${userid}&page=${currentPage}&limit=${limitp}&ser=${inputData.search}`)
             .then(res => {
                 if(res && res.data && res.data.leadRecordsData && res.data.leadRecordsData.length > 0){
                 const data = res.data.leadRecordsData.map((item) => {
@@ -76,7 +62,9 @@ const Dashbord=()=>{
                   }
               }
             )
-            
+            if(res.data.total && res.data.total > 0){
+                setTotPage(res.data.total)
+            }
             setLeadStoreData(data);
             }else if(res.data.msg){
                 setMsg(res.data.msg)
@@ -191,35 +179,19 @@ const Dashbord=()=>{
                                 </Table>
                                 {msg && <p className='nofound'>{msg}</p>}
                               </div>
-                              <div className='pagination-wrap'>
-                            <div className="pagination-wrap" bis_skin_checked="1">
-                              <ul className="pagination">
-                                {/* <li className="page-item">
-                                  <a className="page-link" role="button" tabindex="0" href="#">1</a>
-                                  </li> */}
-                                  {/* <li className="page-item active"><span className="page-link">2<span className="visually-hidden">(current)</span></span></li> */}
-                                  {pageList.map((data, i)=>{
-
-                              return(
-                                <li key={i} onClick={()=>{
-                              setCurrentPage(data)}} className={currentPage == data ? 'page-item active' : 'page-item'}>
-                                {currentPage != data && <a href="#" className='page-link'>{data}</a>}
-                                {currentPage == data && 
-                                <span className="page-link">{currentPage}<span className="visually-hidden">(current)</span></span>
-                                }
-                                </li>
-                                          )
-                                      })}                            
-                                  {/* <li className="page-item"><a className="page-link" role="button" tabindex="0" href="#">3</a></li>
-                                  <li className="page-item"><a className="page-link" role="button" tabindex="0" href="#">4</a></li>
-                                  <li className="page-item"><a className="page-link" role="button" tabindex="0" href="#">5</a></li> */}
-                                  </ul>
+                            <div className="pagination-wrap">
+                                <ul className="pagination">
+                                    {        currentPage > 1 &&                          
+                                        <li className="page-item" onClick={()=>{
+                                        setCurrentPage(currentPage-1)}}><a href="#" className='page-link'>{currentPage-1}</a></li>
+                                    }                                  
+                                        <li className="page-item active"><span className="page-link">{currentPage}<span className="visually-hidden">{currentPage}</span></span></li>
+                                    {        currentPage < totPage &&                          
+                                        <li className="page-item" onClick={()=>{
+                                        setCurrentPage(currentPage+1)}}><a href="#" className='page-link'>{currentPage+1}</a></li>
+                                    }
+                                </ul>                                  
                             </div>
-                                {/* <Pagination>{items}</Pagination> */}
-                            </div>                              
-                            {/* <div className='pagination-wrap'>
-                                <Pagination>{items}</Pagination>
-                            </div> */}
                         </div>
                     </div>
                 </div>
@@ -228,5 +200,5 @@ const Dashbord=()=>{
         </>
     )
 }
-export default Dashbord
+export default Dashboard
 

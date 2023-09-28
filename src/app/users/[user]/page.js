@@ -136,19 +136,11 @@ const EditUser = ({params})=>{
   useEffect(() => {
     if (typeof window !== 'undefined' && window.localStorage) {
         getUser()
-    //    let companyname = localStorage.getItem('companyname');
-    //    let title = localStorage.getItem('title');
-    //    let name = localStorage.getItem('name');
-    //    let email = localStorage.getItem('email');
-    //    let contactno = localStorage.getItem('contactno');
-    //    let about = localStorage.getItem('about');
-    //    let location = localStorage.getItem('location');
-    //    let image = localStorage.getItem('image');
-    //    let logo = localStorage.getItem('logo');
        let updatedBy = localStorage.getItem('tokenAuth');
        let userid = localStorage.getItem('userid');
        setUserId(updatedBy)
     }
+    setMsgType('')
     }, []);
     return(
         <>
@@ -216,7 +208,7 @@ const EditUser = ({params})=>{
                             </div>
                         </div>
                         </div>
-                        {modalShow &&
+                        {modalShow && msgType &&
                             <MsgModal 
                             msgType={msgType}
                             msg={msg}
