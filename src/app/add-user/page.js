@@ -9,9 +9,11 @@ import { faHouse } from '@fortawesome/free-solid-svg-icons'
 import axios from 'axios';
 import Link from 'next/link';
 import MsgModal from '../template/MsgModal'
+import Loader  from '../template/Loading'
 
 const AddUser=()=>{
    const [msg, setFormStatus] = useState('')
+   const [isLoading, setLoading] = useState(true)
    const [submitBtn, setSubmitBtn] = useState({})
    const [closeIcon, setCloseIcon] = useState(false)
    const [isValidEmail, setIsValidEmail] = useState(false)
@@ -69,7 +71,7 @@ const sideCanvasActive= () =>{
 }
 const onSubmit = (e) => {
    e.preventDefault()
-
+  // setLoading(true)
    setModalShow(false)
    setMsgType('')
    setSubmitBtn({
@@ -145,6 +147,7 @@ const onSubmit = (e) => {
      .catch(err => {
       })
    }
+   setLoading(true)
  }
  useEffect(() => {
    if (typeof window !== 'undefined' && window.localStorage) {
@@ -172,7 +175,7 @@ const onSubmit = (e) => {
          updatedBy : updatedBy ? updatedBy : '',
          userid : userid ? userid: null
      });
-
+     setLoading(false)
    }
    }, []);
  return(
@@ -206,6 +209,7 @@ const onSubmit = (e) => {
                     <div className='row'>
                       <div className='col-md-12'>
                          <div className='add-more-form'>
+{ !isLoading &&                           
                              <form onSubmit={onSubmit}>
                                 <div className='row'>
                                    <div className='col-md-6'>
@@ -251,6 +255,8 @@ const onSubmit = (e) => {
                                    </div>
                                 </div>
                              </form>
+                             }
+                             {isLoading && <Loader />}
                          </div>
                       </div>
                     </div>

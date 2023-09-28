@@ -9,9 +9,10 @@ import Sidebaar from '../template/Sidebaar';
 import Header from '../template/Header';
 import Link from "next/link"
 import axios from 'axios';
+import Loader from '../template/Loading';
 
 const Users=()=>{
-
+    const [isLoading, setLoading] = useState(true)
     const [totPage, setTotPage] = useState(0);
     const [currentPage, setCurrentPage] = useState(1);
     const [limitp, setlimitp] =useState(5);
@@ -45,9 +46,10 @@ const Users=()=>{
           if(res.data.total && res.data.total > 0){
             setTotPage(res.data.total)
         }
-          setLoading(true);
+          setLoading(false);
         })
         .catch(err => {
+            setLoading(false)
          })
      } 
       useEffect(() => {
@@ -124,6 +126,7 @@ const Users=()=>{
                                     <th>Action</th>
                                     </tr>
                                 </thead>
+{ !isLoading &&
                                 <tbody>
                                     { userStoreData && userStoreData.length > 0 && userStoreData.map((users, u)=>{
                                         return(
@@ -137,9 +140,10 @@ const Users=()=>{
                                         <td><Link href={'/users/'+users.id}><FontAwesomeIcon icon={faPenToSquare} /></Link></td>
                                     </tr>
                                     )})}
-                                </tbody>
+                                </tbody>}
                                 </Table>
                               </div>
+                              {isLoading && <Loader />}
                               <div className="pagination-wrap">
                                 <ul className="pagination">
                                     {        currentPage > 1 &&                          

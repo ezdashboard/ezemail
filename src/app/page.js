@@ -20,7 +20,7 @@ const robotolight=Roboto({
 })
 
 
-function Login() {
+const Login=()=> {
   const router = useRouter()
   const [isLoading, setLoading] = useState(false)
   const [closeIcon, setCloseIcon] = useState(false)
@@ -39,7 +39,6 @@ function Login() {
   const handleChange =(event)=> {
     setModalShow(false)
     const {name, value} = event.target;
-    // console.log('hlo', value)
     setInputData((valuePre)=>{
    return{
      ...valuePre,
@@ -133,9 +132,6 @@ useEffect(() => {
         <div className="col-md-12">
            <div className="login-form ">
              <form  className="login ">
-             {/* <div className="col-md-12">
-                        {closeIcon  ?<span style={submitBtn}>{msg}  <span onClick={submitCloseIcon}><i className="fa fa-times" aria-hidden="true"></i></span></span>: ""}
-             </div> */}
              <h1 className={roboto.className}>Log In To LMS</h1> 
               {isLoading &&
                 <div className='loader'>
@@ -156,11 +152,11 @@ useEffect(() => {
               </form>
             </div>  
             {modalShow &&
-                        <MsgModal 
-                           msgType={msgType}
-                           msg={msg}
-                        />
-                     }
+                <MsgModal 
+                    msgType={msgType}
+                    msg={msg}
+                />
+            }
         </div>
      </div>
     </div>

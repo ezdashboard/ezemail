@@ -9,13 +9,14 @@ import { faHouse } from '@fortawesome/free-solid-svg-icons'
 import axios from 'axios';
 import Link from 'next/link';
 import MsgModal from '../template/MsgModal';
+import Loader from '../template/Loading';
 
 
 const Addmore=()=>{
    const [sideBarAccess, setSideBarAccess] = useState({
       users: false
    });
-
+   const [isLoading, setLoading] = useState(true)
    const [userType, setUserType] = useState('')
    const [userid, setUserid] = useState(null)
    const [inputData, setInputData] = useState({
@@ -94,6 +95,7 @@ const Addmore=()=>{
    }
    const onSubmit = (e) => {
       e.preventDefault()
+      //setLoading(true);
       setSubmitBtn({
         padding: '1rem 0rem',
         display: 'block',
@@ -111,35 +113,16 @@ const Addmore=()=>{
       }else if(!inputData.leadDate){
          setFormStatus("Lead date can not be blank.")
          setModalShow(true)
-         setMsgType('error')  
-      // }else if(!inputData.clientName){
-      //    setFormStatus("Client name can not be blank.")
-      //    setModalShow(true)
-      //    setMsgType('error')          
+         setMsgType('error')          
       }else if(!inputData.primaryEmail){
         setFormStatus("Primary Email can not be blank.")
         setModalShow(true)
-        setMsgType('error')  
-      // }else if(!inputData.secondaryEmail){
-      //    setFormStatus("Secondary Email can not be blank.")
-      //    setModalShow(true)
-      //    setMsgType('error')  
-      // }else if(!inputData.websiteUrl){
-      //    setFormStatus("Website url can not be blank.")
-      //    setModalShow(true)
-      //    setMsgType('error') 
-      // }else if(!inputData.contactNumber){
-      //    setFormStatus("Contact Number can not be blank.")
-      //    setModalShow(true)
-      //    setMsgType('error')   
+        setMsgType('error')   
       }else if(!inputData.services){
          setFormStatus("Please select services.")
          setModalShow(true)
          setMsgType('error')  
-      // }else if(!inputData.industry){
-      //    setFormStatus("Industry can not be blank.")
-      //    setModalShow(true)
-      //    setMsgType('error')  
+ 
       }else if(!inputData.country){
          setFormStatus("Please select country.")
          setModalShow(true)
@@ -156,40 +139,41 @@ const Addmore=()=>{
           'Content-Type': 'multipart/form-data'
         }
       })
-          .then(res => {
-              const data = res.data;
-              if(res &&  res.data && res.data.error && res.data.error.length > 0){
-                  setFormStatus(res.data.error);
-                  setModalShow(true)
-                  setMsgType('error') 
-                  setCloseIcon(true);
-              }else if(res &&  res.data && res.data.msg && res.data.msg.length > 0){
-                      //Router.push('/thankyou')
-                      setFormStatus("User added successfully.");
-                      setModalShow(true)
-                      setMsgType('success') 
-                      //localStorage.clear();
-                      setInputData({
-                        companyname : '',
-                        name : '',
-                        email : '',
-                        mangerId:'',
-                        contactno : '',
-                        type:'',
-                        password : ''
-                    });
-                      setCloseIcon(true);
-                      setSubmitBtn({
-                        padding: '1rem 0rem',
-                        display: 'block',
-                        color: '#46c737'
-                      })
-                    }
-    
-        })
+         .then(res => {
+            const data = res.data;
+            if(res &&  res.data && res.data.error && res.data.error.length > 0){
+               setFormStatus(res.data.error);
+               setModalShow(true)
+               setMsgType('error') 
+               setCloseIcon(true);
+            }else if(res &&  res.data && res.data.msg && res.data.msg.length > 0){
+                     //Router.push('/thankyou')
+                     setFormStatus("User added successfully.");
+                     setModalShow(true)
+                     setMsgType('success') 
+                     //localStorage.clear();
+                     setInputData({
+                     companyname : '',
+                     name : '',
+                     email : '',
+                     mangerId:'',
+                     contactno : '',
+                     type:'',
+                     password : ''
+                  });
+                     setCloseIcon(true);
+                     setSubmitBtn({
+                     padding: '1rem 0rem',
+                     display: 'block',
+                     color: '#46c737'
+                     })
+                  }
+   
+      })
         .catch(err => {
          })
       }
+      setLoading(false)
     }                
    useEffect(() => {
       if (typeof window !== 'undefined' && window.localStorage) {
@@ -201,7 +185,8 @@ const Addmore=()=>{
          }
          setUserid(userid)
          getServiceData()
-         getCountryData()  
+         getCountryData() 
+         setLoading(false) 
       }
       }, []);
 
@@ -239,6 +224,7 @@ const Addmore=()=>{
                     </div> */}
                       <div className='col-md-12'>
                          <div className='add-more-form'>
+{ !isLoading &&                           
                              <form onSubmit={onSubmit}>
                                 <div className='row'>
                                    {/* <div className='col-md-6'>
@@ -345,6 +331,8 @@ const Addmore=()=>{
                                    </div>
                                 </div>
                              </form>
+                             }
+                             {isLoading && <Loader />}
                          </div>
                       </div>
                     </div>

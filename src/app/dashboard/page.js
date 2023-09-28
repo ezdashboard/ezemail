@@ -9,12 +9,13 @@ import Table from 'react-bootstrap/Table';
 import Sidebaar from '../template/Sidebaar';
 import Header from '../template/Header';
 import Link from "next/link"
-import Pagination from 'react-bootstrap/Pagination';
 import axios from 'axios';
+import Loader from '../template/Loading'
 
 const Dashboard=()=>{
     const [userType, setUserType] = useState('')
     const [totPage, setTotPage] = useState(0);
+    const [isLoading, setLoading] = useState(true)
     const [currentPage, setCurrentPage] = useState(1);
     const [limitp, setlimitp] =useState(5);
     const sideCanvasActive= () =>{ 
@@ -69,8 +70,10 @@ const Dashboard=()=>{
             }else if(res.data.msg){
                 setMsg(res.data.msg)
             }
+            setLoading(false)
           })
           .catch(err => {
+            setLoading(false)
            })
         }
      } 
@@ -135,6 +138,7 @@ const Dashboard=()=>{
                                 <div className='add-more'>
                                 <Link href='/addmore'>Add More</Link>
                               </div>}
+
                               <div className='lms-table-wrap'>
                                <Table striped bordered hover >
                                 <thead>
@@ -154,29 +158,35 @@ const Dashboard=()=>{
                                     <th>Generated From</th>
                                     </tr>
                                 </thead>
-                                <tbody>
-                                {leadStoreData && leadStoreData.length > 0 && leadStoreData.map((lead, l)=>{
-                                    return(
-                                        <tr key={l}>
-                                        <td>{l+1}</td>
-                                        <td>{lead.leadGenBy}</td>
-                                        <td>{lead.leadGenFor}</td>
-                                        <td>{lead.leadDate}</td>
-                                        <td>{lead.clientName}</td>
-                                        <td>{lead.primaryEmail}</td>
-                                        <td>{lead.secondaryEmail}</td>
-                                        <td>{lead.websiteUrl}</td>
-                                        <td>{lead.contactNumber}</td>
-                                        <td>{lead.serviceName}</td>
-                                        <td>{lead.industry}</td>
-                                        <td>{lead.country}</td>
-                                        <td>{lead.genratedFrom}</td>                                    
-                                    </tr>
-                                    )
-                                })}
-                               
-                                </tbody>
+
+                                { !isLoading &&
+                                    <tbody>
+                                    {leadStoreData && leadStoreData.length > 0 && leadStoreData.map((lead, l)=>{
+                                        return(
+                                            <tr key={l}>
+                                            <td>{l+1}</td>
+                                            <td>{lead.leadGenBy}</td>
+                                            <td>{lead.leadGenFor}</td>
+                                            <td>{lead.leadDate}</td>
+                                            <td>{lead.clientName}</td>
+                                            <td>{lead.primaryEmail}</td>
+                                            <td>{lead.secondaryEmail}</td>
+                                            <td>{lead.websiteUrl}</td>
+                                            <td>{lead.contactNumber}</td>
+                                            <td>{lead.serviceName}</td>
+                                            <td>{lead.industry}</td>
+                                            <td>{lead.country}</td>
+                                            <td>{lead.genratedFrom}</td>                                    
+                                        </tr>
+                                        )
+                                    })}
+                                
+                                    </tbody>
+                                }
                                 </Table>
+                                {   isLoading &&                          
+                                    <Loader />
+                                } 
                                 {msg && <p className='nofound'>{msg}</p>}
                               </div>
                             <div className="pagination-wrap">

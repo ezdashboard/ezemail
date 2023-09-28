@@ -12,9 +12,11 @@ import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import axios from 'axios';
+import Loader from '../template/Loading';
 
 const Profile=()=>{
   const [show, setShow] = useState(false);
+  const [isLoading, setLoading] = useState(true)
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
   const [msg, setFormStatus] = useState('')
@@ -50,6 +52,7 @@ const [sideBarAccess, setSideBarAccess] = useState({
   users: false
 });
 const [email, setEmail] = useState('')
+const [isMLoading, setIsMLoading] = useState(false)
 const [logo, setLogo] = useState('')
 const [image, setImage] = useState('')
 const [userid, setUserid] = useState(null)
@@ -74,6 +77,7 @@ const inputChangeData =(event)=> {
   }
   const onSubmit = (e) => {
     e.preventDefault()
+    setIsMLoading(true)
     setSubmitBtn({
       padding: '1rem 0rem',
       display: 'block',
@@ -90,6 +94,7 @@ const inputChangeData =(event)=> {
       setFormStatus("Title can not be blank.")
       setCloseIcon(true);   
     }else{
+      setIsMLoading(true)
       inputData.userid = profileData && profileData.userid ? profileData.userid : '';
       axios.post(`${process.env.API_BASE_URL}updateProfile.php`,inputData,{
         headers: {
@@ -101,6 +106,7 @@ const inputChangeData =(event)=> {
             if(res &&  res.data && res.data.error && res.data.error.length > 0){
                 setFormStatus(res.data.error);
                 setCloseIcon(true);
+                setIsMLoading(false)
             }else if(res &&  res.data && res.data.msg && res.data.msg.length > 0){
                     //Router.push('/thankyou')
                     setFormStatus("Update Successfully.");
@@ -129,13 +135,16 @@ const inputChangeData =(event)=> {
                       display: 'block',
                       color: '#46c737'
                     })
+                    setIsMLoading(false)
                   }
             
   
       })
       .catch(err => {
+        setIsMLoading(false)
        })
     }
+    
   }
   useEffect(() => {
     if (typeof window !== 'undefined' && window.localStorage) {
@@ -181,6 +190,7 @@ const inputChangeData =(event)=> {
       updatedBy : updatedBy ? updatedBy : '',
       userid : userid ? userid: null
   });
+  setLoading(false)
 }
 
     }, []);
@@ -232,6 +242,7 @@ const inputChangeData =(event)=> {
                                           <FontAwesomeIcon icon={faPenToSquare} />
                                       </div>
                                       </Link>
+                                    {  !isLoading &&                                   
                                       <ul>
                                           <li>
                                             <div className='profile-user-item'>
@@ -264,28 +275,12 @@ const inputChangeData =(event)=> {
                                             </div>
                                           </li>
                                       </ul>
+                                    }
+                                    {isLoading && <Loader />}
                                     </div>
                                     </div>
                                 </div>
                               </div>
-                              {/* <div className='col-md-7'>
-                                <div className='profile-right'>
-                                    <Link href='#'>
-                                    <div className='profile-edit'>
-                                      <FontAwesomeIcon icon={faPenToSquare} />
-                                    </div>
-                                    </Link>
-                                    <div className='profile-about-info'>
-                                      <span className='profile-title'>About Me</span>
-                                      <div className='profile-text'>
-                                          <p>When referring to Lorem ipsum, different expressions are used, namely fill text , fictitious text , blind text or placeholder text : in short,
-                                            its meaning can also be zero, but its usefulness is so clear as to go through the centuries and resist the ironic and modern versions that came
-                                            with the arrival of the web.
-                                          </p>
-                                      </div>
-                                    </div>
-                                </div>
-                              </div> */}
                           </div>
                         </div>
                       </div>
@@ -299,10 +294,10 @@ const inputChangeData =(event)=> {
           show={modalShow}
           onHide={closeModal}
           inputData={inputData}
+          isMLoading={isMLoading}
           inputChangeData={inputChangeData}
           onSubmit={onSubmit}
           msg={msg}
-
       />
     </>
  )
