@@ -146,7 +146,9 @@ const Users=()=>{
                                         <td>{users.contactno}</td>
                                         <td>{users.type}</td>
                                         <td>{users.status}</td>
-                                        <td><Link href={'/users/'+users.id}><FontAwesomeIcon icon={faPenToSquare} /></Link></td>
+                                        <td><a href={'#'} onClick={()=>{
+                                    getPage('/users/'+users.id)
+                                }}><FontAwesomeIcon icon={faPenToSquare} /></a></td>
                                     </tr>
                                     )})}
                                 </tbody>}

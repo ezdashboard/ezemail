@@ -74,6 +74,7 @@ const onSubmit = (e) => {
   // setLoading(true)
    setModalShow(false)
    setMsgType('')
+   setFormStatus('')
    setSubmitBtn({
      padding: '1rem 0rem',
      display: 'block',
@@ -106,6 +107,7 @@ const onSubmit = (e) => {
       setModalShow(true)
       setMsgType('error')                               
    }else{
+      setLoading(true)
      inputData.userid = profileData && profileData.userid ? profileData.userid : '';
      inputData.updatedBy = profileData && profileData.updatedBy ? profileData.updatedBy : '' 
      axios.post(`${process.env.API_BASE_URL}adduser.php`,inputData,{
@@ -142,12 +144,12 @@ const onSubmit = (e) => {
                      color: '#46c737'
                    })
                  }
+                 setLoading(false)
  
      })
      .catch(err => {
       })
    }
-   setLoading(true)
  }
  useEffect(() => {
    if (typeof window !== 'undefined' && window.localStorage) {

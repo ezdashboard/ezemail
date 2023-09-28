@@ -8,9 +8,11 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faHouse } from '@fortawesome/free-solid-svg-icons'
 import axios from 'axios';
 import MsgModal from '../../template/MsgModal'
+import Loader from '@/app/template/Loading';
 
 const EditUser = ({params})=>{
     const [msg, setFormStatus] = useState('')
+    const [isLoading, setLoading] = useState(false)
     const [submitBtn, setSubmitBtn] = useState({})
     const [closeIcon, setCloseIcon] = useState(false)
     const [isValidEmail, setIsValidEmail] = useState(false)
@@ -80,6 +82,7 @@ const EditUser = ({params})=>{
        setModalShow(true)
        setMsgType('error')                               
     }else{
+        setLoading(true);
       inputData.userid = params && params.user ? params.user : '';
       inputData.updatedBy = userid ? userid : null 
       axios.post(`${process.env.API_BASE_URL}updateUser.php`,inputData,{
@@ -106,6 +109,7 @@ const EditUser = ({params})=>{
                       color: '#46c737'
                     })
                   }
+                  setLoading(false);
   
       })
       .catch(err => {
@@ -115,6 +119,7 @@ const EditUser = ({params})=>{
   const getUser = ()=>{
     console.log('params',params)
     if(params && params.user){
+        setLoading(true);
        axios.get(`${process.env.API_BASE_URL}getuser.php?userid=${params.user}`)
        .then(res => {
        // setLearningData(data);
@@ -125,14 +130,13 @@ const EditUser = ({params})=>{
          type : res.data[0]['type'],
          status : res.data[0]['status']
        })
-       setLoading(true);
+       setLoading(false);
     })
     .catch(err => {
     })
     }
  }
  const [userid,setUserId] = useState(null)
-
   useEffect(() => {
     if (typeof window !== 'undefined' && window.localStorage) {
         getUser()
@@ -172,6 +176,7 @@ const EditUser = ({params})=>{
                         <div className='row'>
                         <div className='col-md-12'>
                             <div className='add-more-form'>
+{  !isLoading &&                  
                                 <form onSubmit={onSubmit}>
                                     <div className='row'>
                                     <div className='col-md-6'>
@@ -205,6 +210,8 @@ const EditUser = ({params})=>{
                                     </div>
                                     </div>
                                 </form>
+                                }
+                                {isLoading && <Loader />}
                             </div>
                         </div>
                         </div>
