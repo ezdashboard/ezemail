@@ -115,12 +115,19 @@ const EditUser = ({params})=>{
       .catch(err => {
        })
     }
+
   }
   const getUser = ()=>{
     console.log('params',params)
     if(params && params.user){
+        try {
+            const config = {
+                headers: {
+                  Authorization: `Bearer ${localStorage.tokenAuth ? localStorage.tokenAuth :''}`,
+                },
+              };
         setLoading(true);
-       axios.get(`${process.env.API_BASE_URL}getuser.php?userid=${params.user}`)
+       axios.get(`${process.env.API_BASE_URL}getuser.php?userid=${params.user}`,config)
        .then(res => {
        // setLearningData(data);
        setInputData({
@@ -134,7 +141,15 @@ const EditUser = ({params})=>{
     })
     .catch(err => {
     })
+} catch (error) {
+    // Handle errors here
+    if(error && error.response.data && error.response.data.detail){
+      setMsg(error.response.data.detail);
     }
+    // console.error(error);
+  }
+    }
+    
  }
  const [userid,setUserId] = useState(null)
   useEffect(() => {

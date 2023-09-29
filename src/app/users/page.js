@@ -28,7 +28,13 @@ const Users=()=>{
     }
 
     const fetchData = async (page) => {
-        axios.get(`${process.env.API_BASE_URL}users.php?page=${page}&limit=${limitp}&user=${localStorage.userid}`)
+        try {
+        const config = {
+            headers: {
+              Authorization: `Bearer ${localStorage.tokenAuth ? localStorage.tokenAuth :''}`,
+            },
+          };
+        axios.get(`${process.env.API_BASE_URL}users.php?page=${page}&limit=${limitp}&user=${localStorage.userid}`,config)
           .then(res => {
               const data = res.data.userData.map((item) => {
                 return {
@@ -54,6 +60,13 @@ const Users=()=>{
         .catch(err => {
             setLoading(false)
          })
+        } catch (error) {
+            // Handle errors here
+            if(error && error.response.data && error.response.data.detail){
+              setMsg(error.response.data.detail);
+            }
+            // console.error(error);
+          }
      }
      const getPage = (url)=>{
         setLoading(true)

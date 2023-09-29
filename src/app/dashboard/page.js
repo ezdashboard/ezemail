@@ -54,7 +54,13 @@ const Dashboard=()=>{
     const getLeadsData = async (userid) => {
         setMsg("");
         if(userid){
-            axios.get(`${process.env.API_BASE_URL}leads.php?updatedBy=${userid}&page=${currentPage}&limit=${limitp}&ser=${inputData.search}`)
+            try {
+                const config = {
+                    headers: {
+                      Authorization: `Bearer ${localStorage.tokenAuth ? localStorage.tokenAuth :''}`,
+                    },
+                  };
+            axios.get(`${process.env.API_BASE_URL}leads.php?page=${currentPage}&limit=${limitp}&ser=${inputData.search}`, config)
             .then(res => {
                 if(res && res.data && res.data.leadRecordsData && res.data.leadRecordsData.length > 0){
                 const data = res.data.leadRecordsData.map((item) => {
@@ -88,6 +94,13 @@ const Dashboard=()=>{
           .catch(err => {
             setLoading(false)
            })
+        } catch (error) {
+            // Handle errors here
+            if(error && error.response.data && error.response.data.detail){
+              setMsg(error.response.data.detail);
+            }
+            // console.error(error);
+          }
         }
      } 
         const [userId, seTuserId] = useState(null)
