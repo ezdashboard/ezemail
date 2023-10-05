@@ -27,6 +27,10 @@ const Dashboard=()=>{
         $(".app__offcanvas-overlay").removeClass("overlay-open");
     
     }
+
+
+
+
     const [leadStoreData, setLeadStoreData] = useState([]);
     const [inputData, setInputData] =useState({
         search:''
@@ -159,13 +163,14 @@ const Dashboard=()=>{
                                     getLeadsData(userId)
                                 }}>Search</button>
                                 </form>
-                              </div>
-{                           userType &&   
+                                { userType &&   
                                 <div className='add-more'>
                                  <a href='#' onClick={()=>{
                                     getPage('/addmore')
                                 }}>Add New</a>
                               </div>}
+                              </div>
+
 
                               <div className='lms-table-wrap'>
                                <Table striped bordered hover >

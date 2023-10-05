@@ -1,4 +1,5 @@
 import './globals.css'
+import './responsive.css'
 import { Roboto } from 'next/font/google'
 import { Providers } from './redux/propviders'
 

@@ -129,7 +129,7 @@ const Users=()=>{
                         <div className='col-xl-12 col-md-12'>
                             { 
                              userType && userType == 'admin' &&   
-                                <div className='add-more'>
+                                <div className='add-more-new'>
                                 <a href='#' onClick={()=>{
                                     getPage('/add-user')
                                 }}>Add User</a>

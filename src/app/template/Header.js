@@ -48,7 +48,7 @@ const Header =()=>{
     <div className="app__header__area">
         <div className="app__header-inner">
             <div className="app__header-left">
-            <Link id="sidebar__active" className="app__header-toggle" href="/dashboard" onClick={sideActive}>
+            <Link id="sidebar__active" className="app__header-toggle" href="#" onClick={sideActive}>
                 <div className="bar-icon-2">
                     <span></span>
                     <span></span>

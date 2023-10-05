@@ -48,11 +48,11 @@ const MyVerticallyCenteredModal =(props)=> {
       </Modal.Body>
     </Modal>
     {props.msg && props.show &&
-                            <MsgModal 
-                            msgType={'success'}
-                            msg={props.msg}
-                            />
-                        }
+        <MsgModal 
+        msgType={'success'}
+        msg={props.msg}
+        />
+     }
     </>
   );
 }
