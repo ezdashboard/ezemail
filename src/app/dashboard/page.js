@@ -164,7 +164,7 @@ const Dashboard=()=>{
                                 <div className='add-more'>
                                  <a href='#' onClick={()=>{
                                     getPage('/addmore')
-                                }}>Add More</a>
+                                }}>Add New</a>
                               </div>}
 
                               <div className='lms-table-wrap'>

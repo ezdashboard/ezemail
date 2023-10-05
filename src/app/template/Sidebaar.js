@@ -43,7 +43,7 @@ return(
                         <Link href="#"><FontAwesomeIcon icon={faArrowRightFromBracket} /><span className="links_name">Log out</span></Link>
                     </div>
                     <div className="sidebar__copyright">
-                        <p>Copyright @ ezrankings 2023</p>
+                        <p>copyright@EzRankings2023</p>
                     </div>
                     </div>
                 </div>

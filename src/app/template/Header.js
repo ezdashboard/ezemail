@@ -77,7 +77,7 @@ const Header =()=>{
                 <div className="user__dropdown" style={{display:shHd ? 'none' : 'block'}}>
                     <ul>
                         <li><FontAwesomeIcon icon={faUser} /><Link href="/profile"> Profile</Link></li>
-                        <li onClick={()=>{Logout()}}><FontAwesomeIcon icon={faArrowRightFromBracket} />Log out</li>
+                        <li onClick={()=>{Logout()}}><Link href="#"><FontAwesomeIcon icon={faArrowRightFromBracket} />Log out</Link></li>
                     </ul>
                 </div>
             </div>

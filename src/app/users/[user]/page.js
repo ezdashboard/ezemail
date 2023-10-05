@@ -191,7 +191,7 @@ const EditUser = ({params})=>{
                         <div className='row'>
                         <div className='col-md-12'>
                             <div className='add-more-form'>
-{  !isLoading &&                  
+                            {  !isLoading &&                  
                                 <form onSubmit={onSubmit}>
                                     <div className='row'>
                                     <div className='col-md-6'>
@@ -220,12 +220,23 @@ const EditUser = ({params})=>{
                                     </div>
                                     <div className='col-md-6'>
                                         <div className='form-group'>
+                                            <level>Status*</level>
+                                            <select onChange={inputChangeData} name="status">
+                                            <option value={inputData.status}>{inputData.status== 1 ? 'Active' : 'Inactive'}</option>
+                                                <option value="1">Active</option>
+                                                <option value="0">Inactive</option>
+                                            </select>
+                                            {/* <input type='text' placeholder='Role*'/> */}
+                                        </div>
+                                    </div>                                    
+                                    <div className='col-md-6'>
+                                        <div className='form-group'>
                                             <button>Update</button>
                                         </div>
                                     </div>
                                     </div>
                                 </form>
-                                }
+                            }
                                 {isLoading && <Loader />}
                             </div>
                         </div>

@@ -34,7 +34,7 @@ const Users=()=>{
               Authorization: `Bearer ${localStorage.tokenAuth ? localStorage.tokenAuth :''}`,
             },
           };
-        axios.get(`${process.env.API_BASE_URL}users.php?page=${page}&limit=${limitp}&user=${localStorage.userid}`,config)
+        axios.get(`${process.env.API_BASE_URL}users.php?page=${page}&limit=${limitp}`,config)
           .then(res => {
               const data = res.data.userData.map((item) => {
                 return {
