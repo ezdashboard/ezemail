@@ -1,6 +1,5 @@
-// import '../globals.css'
+// import './globals.css'
 import { Roboto } from 'next/font/google'
-import { Providers } from '../redux/propviders'
 
 const roboto = Roboto({
   weight: ['100','300','400','500','700', '900'],
@@ -10,8 +9,8 @@ const roboto = Roboto({
 })
 
 export const metadata = {
-  title: 'Add New',
-  description: 'Add New',
+  title: 'Edit User',
+  description: 'Edit User',
 }
 
 export default function RootLayout({ children }) {
@@ -19,11 +18,7 @@ export default function RootLayout({ children }) {
     <html lang="en">
       <head>
       </head>
-      <body className={roboto.className}>
-        
-          {children}
-       
-        </body>
+      <body className={roboto.className}>{children}</body>
     </html>
   )
 }

@@ -210,7 +210,7 @@ const Addmore=()=>{
                                         <nav>
                                         <ul>
                                             <li><span><Link href="/dashboard">Home</Link></span></li>
-                                            <li className="active"><span>Add More</span></li>
+                                            <li className="active"><span>Add New</span></li>
                                         </ul>
                                         </nav>
                                     </div>
