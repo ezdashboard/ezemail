@@ -148,12 +148,12 @@ const Users=()=>{
                                     <th>Action</th>
                                     </tr>
                                 </thead>
-{ !isLoading &&
+                        { !isLoading &&
                                 <tbody>
                                     { userStoreData && userStoreData.length > 0 && userStoreData.map((users, u)=>{
                                         return(
                                     <tr key={u}>
-                                        <td>{u+1}</td>
+                                        <td>{(limitp*(currentPage-1)) + (u+1)}.</td>
                                         <td>{users.name}</td>
                                         <td>{users.email}</td>
                                         <td>{users.contactno}</td>
