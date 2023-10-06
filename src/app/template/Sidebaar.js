@@ -43,7 +43,7 @@ return(
                         <Link href="#"><FontAwesomeIcon icon={faArrowRightFromBracket} /><span className="links_name">Log out</span></Link>
                     </div>
                     <div className="sidebar__copyright">
-                        <p>copyright@EzRankings2023</p>
+                    <p> © 2023 EZ Rankings Pvt. Ltd. <br />All Rights Reserved.</p>
                     </div>
                     </div>
                 </div>

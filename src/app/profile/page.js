@@ -20,6 +20,7 @@ const Profile=()=>{
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
   const [msg, setFormStatus] = useState('')
+  
   const [closeIcon, setCloseIcon] = useState(false)
   const [isValidEmail, setIsValidEmail] = useState(false)
   const [submitBtn, setSubmitBtn] = useState({})
@@ -190,8 +191,8 @@ const inputChangeData =(event)=> {
       updatedBy : updatedBy ? updatedBy : '',
       userid : userid ? userid: null
   });
-  setLoading(false)
 }
+setLoading(false)
 
     }, []);
  return(

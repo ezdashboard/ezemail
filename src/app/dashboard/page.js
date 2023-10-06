@@ -64,6 +64,8 @@ const Dashboard=()=>{
                       Authorization: `Bearer ${localStorage.tokenAuth ? localStorage.tokenAuth :''}`,
                     },
                   };
+                  setLoading(true)
+
             axios.get(`${process.env.API_BASE_URL}leads.php?page=${currentPage}&limit=${limitp}&ser=${inputData.search}`, config)
             .then(res => {
                 if(res && res.data && res.data.leadRecordsData && res.data.leadRecordsData.length > 0){
@@ -86,11 +88,14 @@ const Dashboard=()=>{
                   }
               }
             )
+
             if(res.data.total && res.data.total > 0){
                 setTotPage(res.data.total)
             }
             setLeadStoreData(data);
-            }else if(res.data.msg){
+            }else if(res.data.msg && res.data.leadRecordsData.length==0){
+                setLeadStoreData([]);
+                setTotPage(0)
                 setMsg(res.data.msg)
             }
             setLoading(false)
