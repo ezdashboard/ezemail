@@ -279,16 +279,17 @@ const Dashboard=()=>{
                               </div>}
                               </div>
 
-                            <div className='col-md-6 offset-6'>
-                                
-                                            <button type='button' className = "btn btn-primary" onClick={()=>{
-                                                                                statusUpdate('2')
-                                                                            }}>Disable</button>
-                                                                        
-                                            <button type='button' className = "btn btn-primary" onClick={()=>{
-                                                                                statusUpdate('1')
-                                                                            }}>Enable</button>
-                                                            
+                            <div className='col-md-12'>
+                              <div className='two-btn'>
+                                <button type='button' className = "btn btn-primary" onClick={()=>{
+                                                                statusUpdate('2')
+                                                            }}>Disable</button>
+                                                        
+                                 <button type='button' className = "btn btn-primary" onClick={()=>{
+                                                                statusUpdate('1')
+                                                            }}>Enable</button>
+
+                                  </div>           
                             </div>
                            {/* {imgArry && imgArry.length > 0 && imgArry.map((item, i)=>{
                             return(
