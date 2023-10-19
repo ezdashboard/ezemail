@@ -10,10 +10,8 @@ import axios from 'axios';
 import Link from 'next/link';
 import MsgModal from '../template/MsgModal'
 import Loader  from '../template/Loading'
-import { useRouter } from 'next/navigation';
 
 const AddUser=()=>{
-   const router = useRouter()
 
    const [msg, setFormStatus] = useState('')
    const [isLoading, setLoading] = useState(true)
@@ -126,7 +124,6 @@ const onSubmit = (e) => {
                setModalShow(true)
                setMsgType('error')
            }else if(res &&  res.data && res.data.msg && res.data.msg.length > 0){
-                   //Router.push('/thankyou')
                    setFormStatus("User added successfully.");
                    setMsgType('success')
                    setModalShow(true)

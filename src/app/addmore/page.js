@@ -53,6 +53,7 @@ const Addmore=()=>{
    const [isValidEmail, setIsValidEmail] = useState(false)
    const [modalShow, setModalShow] = useState(false);
    const [msgType, setMsgType] = useState('')
+   const router = useRouter()
 
    const submitCloseIcon = ()=>{
       setCloseIcon(false);
@@ -95,7 +96,6 @@ const Addmore=()=>{
          })
    }
    const onSubmit = (e) => {
-      const router = useRouter()
 
       e.preventDefault()
       //setLoading(true);
