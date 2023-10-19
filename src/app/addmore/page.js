@@ -10,6 +10,7 @@ import axios from 'axios';
 import Link from 'next/link';
 import MsgModal from '../template/MsgModal';
 import Loader from '../template/Loading';
+import { useRouter } from 'next/navigation';
 
 
 const Addmore=()=>{
@@ -94,6 +95,8 @@ const Addmore=()=>{
          })
    }
    const onSubmit = (e) => {
+      const router = useRouter()
+
       e.preventDefault()
       //setLoading(true);
       setSubmitBtn({
@@ -151,6 +154,7 @@ const Addmore=()=>{
                      setFormStatus("User added successfully.");
                      setModalShow(true)
                      setMsgType('success') 
+                     router.push('/dashboard')
                      //localStorage.clear();
                      setInputData({
                      companyname : '',

@@ -12,7 +12,8 @@ import Link from "next/link"
 import axios from 'axios';
 import Loader from '../template/Loading'
 import { useRouter } from 'next/navigation';
-
+import { faPenToSquare } from '@fortawesome/free-solid-svg-icons'
+import MsgModal from '../template/MsgModal'
 const Dashboard=()=>{
 
     const router = useRouter()
@@ -21,21 +22,57 @@ const Dashboard=()=>{
     const [isLoading, setLoading] = useState(true)
     const [currentPage, setCurrentPage] = useState(1);
     const [limitp, setlimitp] =useState(5);
+    const [userinfo, setUserInfo] = useState({
+        languages: [],
+        response: [],
+      });
     const sideCanvasActive= () =>{ 
         $(".expovent__sidebar").removeClass("collapsed");
         $(".expovent__sidebar").removeClass("open");
         $(".app__offcanvas-overlay").removeClass("overlay-open");
     
     }
+    const [imgArry, setImgAry] = useState([]);
 
+    const handleChange = (e) => {
+        // Destructuring
+        setModalShow(false)
+        setMsgType('')
+        const { value, checked } = e.target;
+        const { languages } = userinfo;
+        console.log(`${value} is ${checked}`);
+         
+        if (checked) {
+          setUserInfo({
+            languages: [...languages, value],
+            response: [...languages, value],
+          });
+          let newArry = leadStoreData.filter(item => item.id == parseInt(value));
 
+          setImgAry(imgArry => [newArry[0], ...imgArry]);
+        }
+      
+        else {
+          setUserInfo({
+            languages: languages.filter((e) => e !== value),
+            response: languages.filter((e) => e !== value),
+          });
+          let newArry = imgArry.filter(item => item.id != parseInt(value));
+          setImgAry(newArry);
+        }
+        console.log('IANSNN', imgArry)
+      }; 
 
 
     const [leadStoreData, setLeadStoreData] = useState([]);
+    
     const [inputData, setInputData] =useState({
         search:''
     })
     const [msg, setMsg] = useState('');
+    const [msgType, setMsgType] = useState('')
+    const [modalShow, setModalShow] = useState(false);
+
     const inputChangeData =(event)=> {
     const {name, value} = event.target;
         setInputData((valuePre)=>{
@@ -79,6 +116,7 @@ const Dashboard=()=>{
                     primaryEmail: item.primaryEmail,
                     secondaryEmail:item.secondaryEmail,
                     websiteUrl:item.websiteUrl,
+                    emailStatus: item.emailStatus,
                     contactNumber:item.contactNumber,
                     industry:item.industry,
                     country:item.country,
@@ -111,6 +149,64 @@ const Dashboard=()=>{
             // console.error(error);
           }
         }
+     }
+     const statusUpdate = (status)=>{
+        let data = {
+            status: status,
+            users: imgArry,
+            updatedBy: userId
+        } 
+          if(!status){
+            setMsg("Invalid request.")
+            setModalShow(true)
+            setMsgType('error')  
+        //   }else if(!inputData.genratedFrom){
+        //     setMsg("Please select generated from.")
+        //      setModalShow(true)
+        //      setMsgType('error')                                                                   
+          }else{
+            inputData.userid = userId ? userId : '';
+            inputData.updatedBy =  userId ? userId : '' 
+            axios.post(`${process.env.API_BASE_URL}updateccData.php`,data,{
+              headers: {
+              'Content-Type': 'multipart/form-data'
+            }
+          })
+             .then(res => {
+                const data = res.data;
+                if(res &&  res.data && res.data.error && res.data.error.length > 0){
+                    setMsg(res.data.error);
+                   setModalShow(true)
+                   setMsgType('error') 
+                   setCloseIcon(true);
+                }else if(res &&  res.data && res.data.msg && res.data.msg.length > 0){
+                         //Router.push('/thankyou')
+                         setMsg("Updated successfully.");
+                         setModalShow(true)
+                         setMsgType('success') 
+                         //localStorage.clear();
+                     //     setInputData({
+                     //     companyname : '',
+                     //     name : '',
+                     //     email : '',
+                     //     mangerId:'',
+                     //     contactno : '',
+                     //     type:'',
+                     //     password : ''
+                     //  });
+                         setCloseIcon(true);
+                         setSubmitBtn({
+                         padding: '1rem 0rem',
+                         display: 'block',
+                         color: '#46c737'
+                         })
+                      }
+       
+          })
+            .catch(err => {
+             })
+          }
+          setLoading(false)
      } 
         const [userId, seTuserId] = useState(null)
         useEffect(() => {
@@ -161,6 +257,12 @@ const Dashboard=()=>{
                     </div>
                     <div className='row'>
                         <div className='col-xl-12 col-md-12'>
+                        {modalShow && msgType &&
+                            <MsgModal 
+                            msgType={msgType}
+                            msg={msg}
+                            />
+                        }
                             <div className='email-serach-box'>
                               <form  className="serach">
                                 <input type="text" placeholder="Email"  onChange={inputChangeData} name="search" value={inputData.search}/>
@@ -173,15 +275,37 @@ const Dashboard=()=>{
                                  <a href='#' onClick={()=>{
                                     getPage('/addmore')
                                 }}>Add New</a>
+                                
                               </div>}
                               </div>
 
-
+                            <div className='col-md-6 offset-6'>
+                                
+                                            <button type='button' className = "btn btn-primary" onClick={()=>{
+                                                                                statusUpdate('2')
+                                                                            }}>Disable</button>
+                                                                        
+                                            <button type='button' className = "btn btn-primary" onClick={()=>{
+                                                                                statusUpdate('1')
+                                                                            }}>Enable</button>
+                                                            
+                            </div>
+                           {/* {imgArry && imgArry.length > 0 && imgArry.map((item, i)=>{
+                            return(
+                                <p key={i}>c{item.id}</p>
+                            )
+                           })
+                           
+                           } */}
                               <div className='lms-table-wrap'>
                                <Table striped bordered hover >
                                 <thead>
                                     <tr>
                                     {/* <th>S.N.</th> */}
+                                    <th>
+                                        {/* All<br />
+                                    <input type="checkbox" /> */}
+                                    </th>
                                     <th>Generated By</th>
                                     <th>Generated For</th>
                                     <th>Date</th>
@@ -194,6 +318,7 @@ const Dashboard=()=>{
                                     <th>Industry</th>
                                     <th>Country</th>
                                     <th>Generated From</th>
+                                    <th>Action</th>
                                     </tr>
                                 </thead>
 
@@ -201,8 +326,9 @@ const Dashboard=()=>{
                                     <tbody>
                                     {leadStoreData && leadStoreData.length > 0 && leadStoreData.map((lead, l)=>{
                                         return(
-                                            <tr key={l}>
+                                            <tr key={l} className={lead.emailStatus == 2 ? 'table-danger':'table-light'}>
                                             {/* <td>{l+1}</td> */}
+                                            <td><input type="checkbox" onChange={handleChange} value={lead.id}/></td>
                                             <td>{lead.leadGenBy}</td>
                                             <td>{lead.leadGenFor}</td>
                                             <td>{lead.leadDate}</td>
@@ -214,7 +340,10 @@ const Dashboard=()=>{
                                             <td>{lead.serviceName}</td>
                                             <td>{lead.industry}</td>
                                             <td>{lead.country}</td>
-                                            <td>{lead.genratedFrom}</td>                                    
+                                            <td>{lead.genratedFrom}</td>
+                                            <td><a href={'#'} onClick={()=>{
+                                    getPage('/dashboard/'+lead.id)
+                                }}><FontAwesomeIcon icon={faPenToSquare} /></a></td>                                    
                                         </tr>
                                         )
                                     })}
