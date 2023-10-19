@@ -10,8 +10,11 @@ import axios from 'axios';
 import Link from 'next/link';
 import MsgModal from '../template/MsgModal'
 import Loader  from '../template/Loading'
+import { useRouter } from 'next/navigation';
 
 const AddUser=()=>{
+   const router = useRouter()
+
    const [msg, setFormStatus] = useState('')
    const [isLoading, setLoading] = useState(true)
    const [submitBtn, setSubmitBtn] = useState({})
