@@ -93,7 +93,7 @@ const Dashboard=()=>{
        
      } 
     const getLeadsData = async (userid) => {
-        setMsg("");
+        //setMsg("");
         if(userid){
             try {
                 const config = {
@@ -179,11 +179,16 @@ const Dashboard=()=>{
                    setModalShow(true)
                    setMsgType('error') 
                    setCloseIcon(true);
+                   setImgAry([])
+                   
                 }else if(res &&  res.data && res.data.msg && res.data.msg.length > 0){
                          //Router.push('/thankyou')
+                         setImgAry([])
                          setMsg("Updated successfully.");
                          setModalShow(true)
                          setMsgType('success') 
+                         //let storrLead1 = leadStoreData.filter(item => item.id == parseInt(value));
+                         getLeadsData(userId)
                          //localStorage.clear();
                      //     setInputData({
                      //     companyname : '',
@@ -210,6 +215,7 @@ const Dashboard=()=>{
      } 
         const [userId, seTuserId] = useState(null)
         useEffect(() => {
+            setMsg("");
             if (typeof window !== 'undefined' && window.localStorage) {
                let localType = localStorage.getItem('type');
                let userid = localStorage.getItem('tokenAuth');
@@ -281,7 +287,7 @@ const Dashboard=()=>{
 
                             <div className='col-md-12'>
                               <div className='two-btn'>
-                                <button type='button' className = "btn btn-primary" onClick={()=>{
+                                <button type='button' style={{background:'#eccccf'}} className = "btn btn-primary" onClick={()=>{
                                                                 statusUpdate('2')
                                                             }}>Disable</button>
                                                         
