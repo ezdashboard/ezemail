@@ -14,6 +14,7 @@ import Loader from '../template/Loading'
 import { useRouter } from 'next/navigation';
 import { faPenToSquare } from '@fortawesome/free-solid-svg-icons'
 import MsgModal from '../template/MsgModal'
+import ExcelDownloadButton from '../template/ExcelDownloadButton';
 const Dashboard=()=>{
 
     const router = useRouter()
@@ -69,11 +70,16 @@ const Dashboard=()=>{
     const [inputData, setInputData] =useState({
         search:''
     })
+    const [searData, setSearData] =useState({
+      startDate:'',
+      endDate:'',
+    })
     const [msg, setMsg] = useState('');
     const [msgType, setMsgType] = useState('')
     const [modalShow, setModalShow] = useState(false);
 
     const inputChangeData =(event)=> {
+      setModalShow(false)
     const {name, value} = event.target;
         setInputData((valuePre)=>{
             return{
@@ -92,7 +98,84 @@ const Dashboard=()=>{
         }
        
      } 
+     const inputSearchData =(event)=> {
+     // setModalShow(false)
+    const {name, value} = event.target;
+        setSearData((valuePre)=>{
+            return{
+            ...valuePre,
+            [name]:value
+            }
+        })
+    }
+    const [sData, setSeData] = useState([])
+
+    const getSearchData=()=>{
+      var userid = 1;
+      // alert(searData.startDate);
+      // alert(searData.endDate);
+      // alert()
+      setModalShow(false)
+      //setMsg("");
+      if(userid){
+          try {
+              const config = {
+                  headers: {
+                    Authorization: `Bearer ${localStorage.tokenAuth ? localStorage.tokenAuth :''}`,
+                  },
+                };
+                setLoading(true)
+
+          axios.get(`${process.env.API_BASE_URL}dwlLeads.php?&stD=${searData.startDate}&enD=${searData.endDate}`, config)
+          .then(res => {
+              if(res && res.data && res.data.leadRecordsData && res.data.leadRecordsData.length > 0){
+              const data = res.data.leadRecordsData.map((item) => {
+                return {
+                  id: item.id,
+                  clientName: item.clientName,
+                  create_at: item.create_at,
+                  leadDate:  item.leadDate,
+                  leadGenFor: item.leadGenFor,
+                  primaryEmail: item.primaryEmail,
+                  secondaryEmail:item.secondaryEmail,
+                  websiteUrl:item.websiteUrl,
+                  emailStatus: item.emailStatus,
+                  contactNumber:item.contactNumber,
+                  industry:item.industry,
+                  country:item.country,
+                  genratedFrom:item.genratedFrom,
+                  leadGenBy: item.leadGenBy,
+                  serviceName: item.serviceName
+                }
+            }
+          )
+
+          // if(res.data.total && res.data.total > 0){
+          //     setTotPage(res.data.total)
+          // }
+          setSeData(data);
+          setMsg('')
+          }else if(res.data.msg && res.data.leadRecordsData.length==0){
+            setSeData([]);
+              //setTotPage(0)
+              setMsg(res.data.msg)
+          }
+          setLoading(false)
+        })
+        .catch(err => {
+          setLoading(false)
+         })
+      } catch (error) {
+          // Handle errors here
+          if(error && error.response.data && error.response.data.detail){
+            setMsg(error.response.data.detail);
+          }
+          // console.error(error);
+        }
+      }
+    }
     const getLeadsData = async (userid) => {
+      setModalShow(false)
         //setMsg("");
         if(userid){
             try {
@@ -131,6 +214,7 @@ const Dashboard=()=>{
                 setTotPage(res.data.total)
             }
             setLeadStoreData(data);
+            setMsg('')
             }else if(res.data.msg && res.data.leadRecordsData.length==0){
                 setLeadStoreData([]);
                 setTotPage(0)
@@ -189,16 +273,6 @@ const Dashboard=()=>{
                          setMsgType('success') 
                          //let storrLead1 = leadStoreData.filter(item => item.id == parseInt(value));
                          getLeadsData(userId)
-                         //localStorage.clear();
-                     //     setInputData({
-                     //     companyname : '',
-                     //     name : '',
-                     //     email : '',
-                     //     mangerId:'',
-                     //     contactno : '',
-                     //     type:'',
-                     //     password : ''
-                     //  });
                          setCloseIcon(true);
                          setSubmitBtn({
                          padding: '1rem 0rem',
@@ -252,6 +326,7 @@ const Dashboard=()=>{
                                     <div className="breadcrumb__menu">
                                         <nav>
                                         <ul>
+                                        
                                             <li><span><Link href="#">Home</Link></span></li>
                                             <li className="active"><span>Dashboard</span></li>
                                         </ul>
@@ -271,6 +346,7 @@ const Dashboard=()=>{
                         }
                             <div className='email-serach-box'>
                               <form  className="serach">
+                               
                                 <input type="text" placeholder="Email"  onChange={inputChangeData} name="search" value={inputData.search}/>
                                 <button type="button" onClick={()=>{
                                     getLeadsData(userId)
@@ -286,8 +362,30 @@ const Dashboard=()=>{
                               </div>
                               { userType && userType=='admin' &&
                             <div className='col-md-12'>
+                              {/* <div className='col-md-4'>
+                                <input type="date"/>
+                              </div>
+                              <div className='col-md-4'>
+                              <input type="date"/>
+                              </div>
+                              <div className='col-md-4'>
+                              <input type="submit" value="Search"/>
+                              </div> */}
+                              <div className="ser">
+                              <div className='ser-wrap'>
+                                <form>
+                                  <input type='date' name="startDate" onChange={inputSearchData} value={searData.startDate}/>
+                                  <input type='date' name="endDate" onChange={inputSearchData} value={searData.endDate}/>
+                                  {/* <div onClick={getSearchData}/>Search<div/> */}
+                                  <button type='button' onClick={()=>{
+                                                                getSearchData()
+                                                            }}>Search</button>
+                                </form>
+                                {sData && sData.length > 0 &&
+                                  <ExcelDownloadButton data={sData} fileName="records"/>}
+                              </div>
                               <div className='two-btn'>
-                                <button type='button' style={{background:'#eccccf'}} className = "btn btn-primary" onClick={()=>{
+                                <button type='button'  className = "btn btn-primary" onClick={()=>{
                                                                 statusUpdate('2')
                                                             }}>Disable</button>
                                                         
@@ -295,7 +393,9 @@ const Dashboard=()=>{
                                                                 statusUpdate('1')
                                                             }}>Enable</button>
 
+                              
                                   </div>           
+                            </div>
                             </div>}
                            {/* {imgArry && imgArry.length > 0 && imgArry.map((item, i)=>{
                             return(
@@ -325,7 +425,9 @@ const Dashboard=()=>{
                                     <th>Industry</th>
                                     <th>Country</th>
                                     <th>Generated From</th>
-                                    <th>Action</th>
+                                    {    userType && userType=='admin' &&
+                                      <th>Action</th>
+                                    }
                                     </tr>
                                 </thead>
 
@@ -350,9 +452,10 @@ const Dashboard=()=>{
                                             <td>{lead.industry}</td>
                                             <td>{lead.country}</td>
                                             <td>{lead.genratedFrom}</td>
+                                         { userType && userType=='admin' &&
                                             <td><a href={'#'} onClick={()=>{
                                     getPage('/dashboard/'+lead.id)
-                                }}><FontAwesomeIcon icon={faPenToSquare} /></a></td>                                    
+                                }}><FontAwesomeIcon icon={faPenToSquare} /></a></td> }                                   
                                         </tr>
                                         )
                                     })}

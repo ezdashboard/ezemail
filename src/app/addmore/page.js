@@ -17,6 +17,8 @@ const Addmore=()=>{
    const [sideBarAccess, setSideBarAccess] = useState({
       users: false
    });
+
+   const [currDate, setCurrDate] = useState('');
    const [isLoading, setLoading] = useState(true)
    const [userType, setUserType] = useState('')
    const [userid, setUserid] = useState(null)
@@ -38,12 +40,17 @@ const Addmore=()=>{
       setModalShow(false)
       setMsgType('')
       const {name, value} = event.target;
-        setInputData((valuePre)=>{
-       return{
-         ...valuePre,
-         [name]:value
-       }
-      })
+      if(name=='leadDate'){
+         setCurrDate(value)
+      }else{
+         setInputData((valuePre)=>{
+            return{
+              ...valuePre,
+              [name]:value
+            }
+           })
+      }
+
    }
    const [serviceStoreData, setServiceStoreData] = useState([]);
    const [countryList, setCountryList] = useState([]);
@@ -113,7 +120,7 @@ const Addmore=()=>{
         setFormStatus("Please select Lead genrate for.")
         setModalShow(true)
         setMsgType('error')
-      }else if(!inputData.leadDate){
+      }else if(!currDate){
          setFormStatus("Lead date can not be blank.")
          setModalShow(true)
          setMsgType('error')          
@@ -187,6 +194,10 @@ const Addmore=()=>{
          if(localType){
           setUserType(localType)
          }
+         var someDate = new Date();
+         someDate.setDate(someDate.getDate());
+         var date = someDate.toISOString().substr(0, 10);
+         setCurrDate(date)
          setUserid(userid)
          getServiceData()
          getCountryData() 
@@ -253,7 +264,7 @@ const Addmore=()=>{
                                    <div className='col-md-6'>
                                       <div className='form-group'>
                                          <level>Lead Date*</level>
-                                         <input type='date' placeholder='Lead Date' onChange={inputChangeData} name="leadDate" value={inputData.leadDate}/>
+                                         <input type='date' placeholder='Lead Date' onChange={inputChangeData} name="leadDate" value={currDate}/>
                                       </div>
                                    </div>
                                    <div className='col-md-6'>
