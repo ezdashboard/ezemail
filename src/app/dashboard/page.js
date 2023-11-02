@@ -22,7 +22,7 @@ const Dashboard=()=>{
     const [totPage, setTotPage] = useState(0);
     const [isLoading, setLoading] = useState(true)
     const [currentPage, setCurrentPage] = useState(1);
-    const [limitp, setlimitp] =useState(5);
+    const [limitp, setlimitp] =useState(50);
     const [userinfo, setUserInfo] = useState({
         languages: [],
         response: [],
@@ -129,9 +129,11 @@ const Dashboard=()=>{
           axios.get(`${process.env.API_BASE_URL}dwlLeads.php?&stD=${searData.startDate}&enD=${searData.endDate}`, config)
           .then(res => {
               if(res && res.data && res.data.leadRecordsData && res.data.leadRecordsData.length > 0){
-              const data = res.data.leadRecordsData.map((item) => {
+                let idn = 0;
+                const data = res.data.leadRecordsData.map((item) => {
+                 idn = idn+1;
                 return {
-                  id: item.id,
+                  id: idn,
                   clientName: item.clientName,
                   create_at: item.create_at,
                   leadDate:  item.leadDate,
