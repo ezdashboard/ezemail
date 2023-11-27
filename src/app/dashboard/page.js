@@ -15,6 +15,8 @@ import { useRouter } from 'next/navigation';
 import { faPenToSquare } from '@fortawesome/free-solid-svg-icons'
 import MsgModal from '../template/MsgModal'
 import ExcelDownloadButton from '../template/ExcelDownloadButton';
+import * as XLSX from 'xlsx';
+
 const Dashboard=()=>{
 
     const router = useRouter()
@@ -156,7 +158,14 @@ const Dashboard=()=>{
           //     setTotPage(res.data.total)
           // }
           setSeData(data);
-          setMsg('')
+          //setMsg('')
+          const ws = XLSX.utils.json_to_sheet(data);
+          const wb = XLSX.utils.book_new();
+          XLSX.utils.book_append_sheet(wb, ws, 'Sheet 1');
+      
+          // Save the Excel file
+          XLSX.writeFile(wb, `${'records'}.xlsx`);
+
           }else if(res.data.msg && res.data.leadRecordsData.length==0){
             setSeData([]);
               //setTotPage(0)
@@ -373,15 +382,16 @@ const Dashboard=()=>{
                               <div className="ser">
                               <div className='ser-wrap'>
                                 <form>
-                                  <input type='date' name="startDate" onChange={inputSearchData} value={searData.startDate}/>
+                                Search:<input type='date' name="startDate" onChange={inputSearchData} value={searData.startDate}/>
                                   <input type='date' name="endDate" onChange={inputSearchData} value={searData.endDate}/>
                                   {/* <div onClick={getSearchData}/>Search<div/> */}
-                                  <button type='button' onClick={()=>{
+                                  {/* <button type='button' onClick={()=>{
                                                                 getSearchData()
-                                                            }}>Search</button>
+                                                            }}>Search</button> */}
                                 </form>
-                                {sData && sData.length > 0 &&
-                                  <ExcelDownloadButton data={sData} fileName="records"/>}
+                                <button onClick={getSearchData}> Download Excel</button>
+                                {/* {sData && sData.length > 0 &&
+                                  <ExcelDownloadButton data={sData} fileName="records"/>} */}
                               </div>
                               <div className='two-btn'>
                                 <button type='button'  className = "btn btn-primary" onClick={()=>{

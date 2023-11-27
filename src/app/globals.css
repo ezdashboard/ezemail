@@ -9,6 +9,14 @@ a, .btn, button, span, svg, p, input, select, textarea, li, img, svg, .transitio
   -o-transition: all 0.3s ease-out 0s;
   transition: all 0.3s ease-out 0s;
 }
+.lms-table-wrap table thead tr th {
+  white-space: pre;
+}
+
+
+.lms-table-wrap table tbody tr td {
+  white-space: pre;
+}
 .login {
     padding: 40px 50px;
     max-width: 500px;

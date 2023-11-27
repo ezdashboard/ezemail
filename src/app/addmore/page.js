@@ -143,10 +143,10 @@ const Addmore=()=>{
          setFormStatus("Please select country.")
          setModalShow(true)
          setMsgType('error')   
-      }else if(!inputData.genratedFrom){
-         setFormStatus("Please select generated from.")
-         setModalShow(true)
-         setMsgType('error')                                                                   
+      // }else if(!inputData.genratedFrom){
+      //    setFormStatus("Please select generated from.")
+      //    setModalShow(true)
+      //    setMsgType('error')                                                                   
       }else{
         inputData.userid = userid ? userid : '';
         inputData.updatedBy =  userid ? userid : '' 
@@ -167,6 +167,7 @@ const Addmore=()=>{
                      setFormStatus("User added successfully.");
                      setModalShow(true)
                      setMsgType('success') 
+                     alert("User added successfully.");
                      router.push('/dashboard')
                      //localStorage.clear();
                      setInputData({
