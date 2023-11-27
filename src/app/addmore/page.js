@@ -42,6 +42,12 @@ const Addmore=()=>{
       const {name, value} = event.target;
       if(name=='leadDate'){
          setCurrDate(value)
+         setInputData((valuePre)=>{
+            return{
+              ...valuePre,
+              [name]:value
+            }
+           })
       }else{
          setInputData((valuePre)=>{
             return{
@@ -198,6 +204,20 @@ const Addmore=()=>{
          someDate.setDate(someDate.getDate());
          var date = someDate.toISOString().substr(0, 10);
          setCurrDate(date)
+         setInputData({
+            leadGenBy: null,
+            leadGenFor:'',
+            leadDate:date,
+            clientName:'',
+            primaryEmail:'',
+            secondaryEmail:'',
+            websiteUrl:'',
+            contactNumber:'',
+            services:'',
+            industry:'',
+            country:'',
+            genratedFrom:''
+         })
          setUserid(userid)
          getServiceData()
          getCountryData() 
