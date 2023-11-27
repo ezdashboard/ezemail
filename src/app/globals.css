@@ -13,7 +13,10 @@ a, .btn, button, span, svg, p, input, select, textarea, li, img, svg, .transitio
   white-space: pre;
 }
 
-
+.ser-wrap form strong {
+  font-weight: 500;
+  margin-right: 10px;
+}
 .lms-table-wrap table tbody tr td {
   white-space: pre;
 }

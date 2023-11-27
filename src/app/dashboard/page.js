@@ -382,7 +382,7 @@ const Dashboard=()=>{
                               <div className="ser">
                               <div className='ser-wrap'>
                                 <form>
-                                Search:<input type='date' name="startDate" onChange={inputSearchData} value={searData.startDate}/>
+                                <strong>Search:</strong><input type='date' name="startDate" onChange={inputSearchData} value={searData.startDate}/>
                                   <input type='date' name="endDate" onChange={inputSearchData} value={searData.endDate}/>
                                   {/* <div onClick={getSearchData}/>Search<div/> */}
                                   {/* <button type='button' onClick={()=>{
