@@ -167,8 +167,9 @@ const Addmore=()=>{
                      setFormStatus("User added successfully.");
                      setModalShow(true)
                      setMsgType('success') 
-                     alert("User added successfully.");
-                     router.push('/dashboard')
+                     //alert("User added successfully.");
+                     setTimeout(router.push('/dashboard'), 30000);
+                     
                      //localStorage.clear();
                      setInputData({
                      companyname : '',
