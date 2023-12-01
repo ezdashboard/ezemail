@@ -12,14 +12,16 @@ import Link from "next/link"
 import axios from 'axios';
 import Loader from '../template/Loading'
 import { useRouter } from 'next/navigation';
-import { faPenToSquare } from '@fortawesome/free-solid-svg-icons'
+import { faPenToSquare,faTrashCan } from '@fortawesome/free-solid-svg-icons'
 import MsgModal from '../template/MsgModal'
+import ConfirmationModal from '../template/ConfirmationModal';
 import ExcelDownloadButton from '../template/ExcelDownloadButton';
 import * as XLSX from 'xlsx';
 
 const Dashboard=()=>{
 
     const router = useRouter()
+    const [isModalOpen, setIsModalOpen] = useState(false);
     const [userType, setUserType] = useState('')
     const [totPage, setTotPage] = useState(0);
     const [isLoading, setLoading] = useState(true)
@@ -35,6 +37,70 @@ const Dashboard=()=>{
         $(".app__offcanvas-overlay").removeClass("overlay-open");
     
     }
+    const [deId, setDelt] = useState('')
+    const openModal = (id) => {
+      setDelt(id)
+      setIsModalOpen(true);
+    };
+  
+    const closeModal = () => {
+      setDelt()
+      setIsModalOpen(false);
+    };
+  
+    const handleConfirm = () => {
+      setLoading(true)
+
+      // Implement your logic to handle confirmation
+      if(deId){
+        try {
+            const config = {
+                headers: {
+                  Authorization: `Bearer ${localStorage.tokenAuth ? localStorage.tokenAuth :''}`,
+                },
+              };
+              setLoading(true)
+        
+        // axios.get(`${process.env.API_BASE_URL}leadDelete.php?&id=${deId}`, config)
+        let temData ={
+          updatedBy : userId ? userId: null,
+          id:deId?deId:null
+        }
+
+        axios.post(`${process.env.API_BASE_URL}leadDelete.php`,temData,{
+          headers: {
+            Authorization: `Bearer ${localStorage.tokenAuth ? localStorage.tokenAuth :''}`,
+            'Content-Type': 'multipart/form-data'
+          }
+      })
+        .then(res => {
+            if(res && res.data && res.data.status){
+              let idn = 0;
+              // getLeadsData(userid,'normal')
+              // setDelt()
+              alert(res.data.msg);
+              // setMsg(res.data.msg);
+              // setMsgType('success')
+              // setModalShow(true)
+
+        }
+        setLoading(false)
+      })
+      .catch(err => {
+        setLoading(false)
+       })
+    } catch (error) {
+        // Handle errors here
+        if(error && error.response.data && error.response.data.detail){
+          setMsg(error.response.data.detail);
+        }
+        // console.error(error);
+      }
+    }
+      console.log('Confirmed');
+      //alert(id)
+      closeModal();
+    };
     const [imgArry, setImgAry] = useState([]);
 
     const handleChange = (e) => {
@@ -453,7 +519,10 @@ const Dashboard=()=>{
                                          { userType && userType=='admin' &&
                                             <td><a href={'#'} onClick={()=>{
                                     getPage('/dashboard/'+lead.id)
-                                }}><FontAwesomeIcon icon={faPenToSquare} /></a></td> }                                   
+                                }}><FontAwesomeIcon icon={faPenToSquare} /></a> 
+                              <a href={'#'} onClick={()=>{
+                                openModal(lead.id)
+                            }}><FontAwesomeIcon icon={faTrashCan} /></a></td> }                                   
                                         </tr>
                                         )
                                     })}
@@ -479,6 +548,11 @@ const Dashboard=()=>{
                                     }
                                 </ul>                                  
                             </div>
+                            <ConfirmationModal
+                              isOpen={isModalOpen}
+                              onCancel={closeModal}
+                              onConfirm={handleConfirm}
+                            />
                         </div>
                     </div>
                 </div>

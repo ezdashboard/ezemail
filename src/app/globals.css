@@ -36,7 +36,38 @@ a, .btn, button, span, svg, p, input, select, textarea, li, img, svg, .transitio
       font-size: 16px;
       border-radius: 2px; 
     }
-  
+  /* App.css */
+.modal {
+  display: none;
+}
+
+.modal.is-active {
+  display: flex;
+}
+
+.modal-background {
+  background-color: rgba(0, 0, 0, 0.3);
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+}
+
+.modal-content {
+  max-width: 400px;
+  margin: auto;
+}
+
+.button {
+  margin-top: 20px;
+}
+.confirm-modal .modal-content {
+  padding: 20px;
+}
+.lms-table-wrap table tbody tr td a {
+  padding: 0px 10px;
+}
   .login input[type=text],
   .login input[type=password] {
     border: 1px solid #c0c0c0;
